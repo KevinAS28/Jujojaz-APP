@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">JujojazBase</string>
+    <string name="loginTextV">Login</string>
+    <string name="emailEText">Email</string>
+    <string name="btnDone">Done</string>
+    <string name="passEText">Password</string>
+</resources>
