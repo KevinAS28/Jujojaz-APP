@@ -19,26 +19,41 @@
             android:id="@+id/emailConfirm_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_weight="1"
+            tools:ignore="TextFields" />
 
         <EditText
+            android:id="@+id/emailConfirm_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_weight="1"
+            tools:ignore="TextFields" />
 
         <EditText
+            android:id="@+id/emailConfirm_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_weight="1"
+            tools:ignore="TextFields" />
 
         <EditText
+            android:id="@+id/emailConfirm_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_weight="1"
+            tools:ignore="TextFields" />
 
     </LinearLayout>
 
-    <EditText
+    <Button
         android:id="@+id/btnDoneEmailConfirm"
         android:layout_width="match_parent"
         android:layout_height="40dp"
