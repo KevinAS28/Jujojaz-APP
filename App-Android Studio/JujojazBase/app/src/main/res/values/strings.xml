@@ -5,4 +5,6 @@
     <string name="btnDone">Done</string>
     <string name="passEText">Password</string>
     <string name="title_activity_home">Home</string>
+    <string name="app_label">java</string>
+    <string name="search_hint">Telusuri</string>
 </resources>
