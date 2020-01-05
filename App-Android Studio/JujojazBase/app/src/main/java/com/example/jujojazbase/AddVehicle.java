@@ -1,26 +1,21 @@
 package com.example.jujojazbase;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.Menu;
 
-public class EditVehicle extends AppCompatActivity {
-    Toolbar toolbar;
+public class AddVehicle extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_vehicle);
-
-        toolbar = findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_add_vehicle);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        getMenuInflater().inflate(R.menu.menu_add, menu);
         return true;
     }
 }

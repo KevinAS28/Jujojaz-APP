@@ -11,4 +11,8 @@
     <string name="titleActionbar">actionBar</string>
     <string name="ownCarText">Owner\'s Car</string>
     <string name="emailOwnCar">owner@gmail.com</string>
+    <string name="titleSend">Send</string>
+    <string name="hintFrom">From</string>
+    <string name="hintCarName">Car Name</string>
+    <string name="hintSubject">Subject</string>
 </resources>
