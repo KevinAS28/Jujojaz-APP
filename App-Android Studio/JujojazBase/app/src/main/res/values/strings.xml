@@ -15,4 +15,5 @@
     <string name="hintFrom">From</string>
     <string name="hintCarName">Car Name</string>
     <string name="hintSubject">Subject</string>
+    <string name="nameCar">Lamborghini</string>
 </resources>
