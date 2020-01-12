@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">JujojazBase</string>
     <string name="loginTextV">Login</string>
-    <string name="emailEText">Email</string>
-    <string name="btnDone">Done</string>
-    <string name="passEText">Password</string>
+    <string name="emailText">Email Or Username</string>
+    <string name="passText">Password</string>
     <string name="title_activity_home">Home</string>
     <string name="app_label">java</string>
     <string name="search_hint">Telusuri</string>
@@ -16,4 +15,8 @@
     <string name="hintCarName">Car Name</string>
     <string name="hintSubject">Subject</string>
     <string name="nameCar">Lamborghini</string>
+    <string name="SignIn">Sign in</string>
+    <string name="textDontHave">Don\'t have an account?</string>
+    <string name="textSignUp">Sign Up</string>
+    <string name="textForgotPass">Forgot Password</string>
 </resources>
