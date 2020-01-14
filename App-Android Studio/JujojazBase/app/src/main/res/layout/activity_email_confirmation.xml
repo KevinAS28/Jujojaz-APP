@@ -57,7 +57,7 @@
         android:id="@+id/btnDoneEmailConfirm"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="@string/btnDone"
+        android:text="done"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:layout_below="@id/linearLayEmail"
