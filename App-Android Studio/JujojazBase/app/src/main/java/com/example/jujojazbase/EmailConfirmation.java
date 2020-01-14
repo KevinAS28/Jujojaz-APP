@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class EmailConfirmation extends AppCompatActivity {
     EditText emailConfirm_1, emailConfirm_2, emailConfirm_3, emailConfirm_4;
-    Button done;
+    TextView textEmail;
+    Button verification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +24,17 @@ public class EmailConfirmation extends AppCompatActivity {
         emailConfirm_2 = findViewById(R.id.emailConfirm_2);
         emailConfirm_3 = findViewById(R.id.emailConfirm_3);
         emailConfirm_4 = findViewById(R.id.emailConfirm_4);
-        done = findViewById(R.id.btnDoneEmailConfirm);
+        textEmail = findViewById(R.id.textEmailVerification);
+        verification = findViewById(R.id.btnVerification);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        done.setOnClickListener(new View.OnClickListener() {
+
+        textEmail.setText(R.string.textEmailVerification);
+
+        verification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("EmailConfirmation", v.toString());

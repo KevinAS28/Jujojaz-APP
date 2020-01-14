@@ -21,4 +21,9 @@
     <string name="textForgotPass">Forgot Password</string>
     <string name="SignUp">SignIn</string>
     <string name="signUpV">Sign Up</string>
+    <string name="textVerification">Verifikasi</string>
+    <string name="textCodeVerification">Masukkan Kode Verifikasi</string>
+    <string name="textRecvCode">Tidak Menerima Kode?</string>
+    <string name="textSendRepeat">Kirim Ulang</string>
+    <string name="textEmailVerification">Kode Verifikasi telah dikirim melalui Email ke </string>
 </resources>

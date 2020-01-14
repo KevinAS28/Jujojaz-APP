@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="50dp"
     android:layout_marginRight="50dp"
-    android:layout_marginTop="300dp"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".EmailConfirmation">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textCodeVerification"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/textEmailVerification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <LinearLayout
         android:id="@+id/linearLayEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="150dp">
+        android:layout_marginBottom="20dp">
 
         <EditText
             android:id="@+id/emailConfirm_1"
@@ -54,15 +66,27 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnDoneEmailConfirm"
+        android:id="@+id/btnVerification"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="done"
+        android:text="@string/textVerification"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:layout_below="@id/linearLayEmail"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
-        android:background="@drawable/oval_background" />
+        android:background="@color/colorPrimary"/>
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textRecvCode"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:id="@+id/sendRepeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textSendRepeat"
+        android:textAlignment="center"/>
+
+</LinearLayout>
