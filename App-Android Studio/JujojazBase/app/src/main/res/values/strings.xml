@@ -19,4 +19,6 @@
     <string name="textDontHave">Don\'t have an account?</string>
     <string name="textSignUp">Sign Up</string>
     <string name="textForgotPass">Forgot Password</string>
+    <string name="SignUp">SignIn</string>
+    <string name="signUpV">Sign Up</string>
 </resources>
