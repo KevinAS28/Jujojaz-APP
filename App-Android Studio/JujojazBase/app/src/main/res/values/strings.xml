@@ -26,4 +26,6 @@
     <string name="textRecvCode">Tidak Menerima Kode?</string>
     <string name="textSendRepeat">Kirim Ulang</string>
     <string name="textEmailVerification">Kode Verifikasi telah dikirim melalui Email ke </string>
+    <string name="menuSearch">search</string>
+    <string name="menuNotification">notification</string>
 </resources>

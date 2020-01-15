@@ -8,23 +8,27 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/homeToolBar"
+        app:title="List Kendaraan"
+        app:titleTextColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"/>
+        android:background="@color/colorPrimary" />
 
     <androidx.appcompat.widget.SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/homeToolBar"/>
+        android:layout_below="@+id/homeToolBar"
+        android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_black_30dp"
-        android:layout_alignParentEnd="true" />
+        android:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_add_black_30dp" />
 
 </RelativeLayout>
