@@ -1,10 +1,13 @@
 package com.example.jujojazbase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +22,9 @@ public class EmailConfirmation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_confirmation);
+
+        getActionBar().setTitle("Verifikasi");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         emailConfirm_1 = findViewById(R.id.emailConfirm_1);
         emailConfirm_2 = findViewById(R.id.emailConfirm_2);
@@ -43,5 +49,13 @@ public class EmailConfirmation extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.d("Menu", item.toString());
+        Intent intent = new Intent(getApplicationContext(), SignUp.class);
+        startActivityForResult(intent, 0);
+        return true;
     }
 }
