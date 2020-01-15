@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class Auth extends AppCompatActivity {
     EditText email, password;
-    Button done;
+    TextView signUp;
+    Button signIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,17 +21,28 @@ public class Auth extends AppCompatActivity {
 
         email = findViewById(R.id.emailEText);
         password = findViewById(R.id.passEText);
-        done = findViewById(R.id.btnDoneAuth);
+        signUp = findViewById(R.id.textSignUp);
+        signIn = findViewById(R.id.btnSignIn);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        done.setOnClickListener(new View.OnClickListener() {
+
+        signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Auth", v.toString());
-                Intent intent = new Intent(Auth.this, EmailConfirmation.class);
+                Intent intent = new Intent(Auth.this, Home.class);
+                startActivity(intent);
+            }
+        });
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Auth", v.toString());
+                Intent intent = new Intent(Auth.this, SignUp.class);
                 startActivity(intent);
             }
         });
