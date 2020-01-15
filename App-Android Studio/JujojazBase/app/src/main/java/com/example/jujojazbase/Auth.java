@@ -33,7 +33,7 @@ public class Auth extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("Auth", v.toString());
-                Intent intent = new Intent(Auth.this, Home.class);
+                Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
             }
         });
@@ -42,7 +42,7 @@ public class Auth extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("Auth", v.toString());
-                Intent intent = new Intent(Auth.this, SignUp.class);
+                Intent intent = new Intent(getApplicationContext(), SignUp.class);
                 startActivity(intent);
             }
         });

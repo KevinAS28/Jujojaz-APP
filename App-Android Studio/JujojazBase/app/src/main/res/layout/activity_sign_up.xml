@@ -10,7 +10,6 @@
     tools:context=".Auth">
 
     <TextView
-        android:id="@+id/signUpTextV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signUpV"
@@ -20,7 +19,6 @@
         android:layout_marginBottom="20dp"/>
 
     <TextView
-        android:id="@+id/signUpEmailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/emailText"
@@ -30,13 +28,12 @@
         tools:ignore="RtlHardcoded" />
 
     <EditText
-        android:id="@+id/emailEText"
+        android:id="@+id/signUpEmailEText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"/>
 
     <TextView
-        android:id="@+id/passText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/passText"
