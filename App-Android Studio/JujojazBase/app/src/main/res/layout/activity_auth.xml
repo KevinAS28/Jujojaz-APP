@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="70dp"
+    android:layout_marginRight="70dp"
+    android:gravity="center"
+    tools:context=".Auth">
+
+    <TextView
+        android:id="@+id/loginTextV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loginTextV"
+        android:textAlignment="center"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/emailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emailText"
+        android:layout_gravity="left|start"
+        android:background="@android:color/darker_gray"
+        android:layout_marginBottom="5dp"
+        tools:ignore="RtlHardcoded" />
+
+    <EditText
+        android:id="@+id/emailEText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/passText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/passText"
+        android:layout_gravity="left|start"
+        android:background="@android:color/darker_gray"
+        android:layout_marginBottom="5dp"
+        tools:ignore="RtlHardcoded" />
+
+    <EditText
+        android:id="@+id/passEText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/SignIn"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/textDontHave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textDontHave"
+        android:textAlignment="center"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/textSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textSignUp"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/textForgotPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textForgotPass"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        android:textColor="@color/colorPrimary"/>
+
+</LinearLayout>
