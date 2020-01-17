@@ -33,7 +33,8 @@
             android:text="@string/loginTextV"
             android:textAlignment="center"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:id="@+id/emailText"
