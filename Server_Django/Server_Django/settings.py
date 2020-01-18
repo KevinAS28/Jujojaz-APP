@@ -1,3 +1,5 @@
+import datetime
+
 """
 Django settings for Server_Django project.
 
@@ -48,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -78,10 +80,25 @@ WSGI_APPLICATION = 'Server_Django.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'jujojaz',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'OPTIONS': {
+            'sql_mode': 'traditional'
+        }
     }
 }
 
@@ -127,6 +144,10 @@ STATIC_URL = '/static/'
 
 #added
 
+AUTH_USER_MODEL = 'API.User'
+
+AUTHENTICATION_BACKENDS = ('API.AuthBackend.SettingsBackend','django.contrib.auth.backends.ModelBackend',)
+
 JWT_SECRET_KEY = "p6freVAAl2rdLe4yJyfOaSxU6rMpb5bh"
 
 REST_FRAMEWORK = {
@@ -138,6 +159,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+
+        
 }
 
 JWT_AUTH = {
