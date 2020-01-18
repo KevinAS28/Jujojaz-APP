@@ -78,3 +78,10 @@ def add_vehicle(request):
     Vehicle(user=user, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
 
     return HttpResponse('')
+
+@jujojaz_login
+def delete_vehicle(request):
+    id_kendaraan = request.POST["id_kendaraan"]
+    kendaraan = Vehicle.objects.get(id=id_kendaraan)
+    kendaraan.delete()
+    return HttpResponse('')
