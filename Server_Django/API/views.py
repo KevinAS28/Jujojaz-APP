@@ -16,3 +16,36 @@ def get_all_vehicle(request):
     kendaraan = list(Vehicle.objects.filter(user=user))
     kendaraan_json = serializers.serialize('json', kendaraan)
     return HttpResponse(kendaraan_json, content_type='application/json')        
+
+@jujojaz_login
+def edit_vehicle(request):
+    id_kendaraan = request.POST["id_kendaraan"]
+    kendaraan = Vehicle.objects.get(id=id_kendaraan)
+    
+    merk_nama = request.POST["merk"]
+    merks = list(VehicleMerk.objects.filter(name=merk_nama))
+    if (len(merks)):
+        merk_object = merks[0]    
+    else:
+        merk_object = VehicleMerk(name=merk_nama)
+        merk_object.save()
+
+    type_nama = request.POST["tipe"]
+    types = list(Vehicletype.objects.filter(name=type_nama))
+    if (len(types)):
+        type_object = types[0]    
+    else:
+        type_object = VehicleType(name=type_nama)
+        type_object.save()
+    
+    user = User.objects.get(username=request.POST['username'])
+
+    kendaraan.tipe = type_object
+    kendaraan.merk = merk_object
+    kendaraan.pajak_setiap_berapa_hari = int(request.POST["pajak_setiap_berapa_hari"])
+    kendaraan.pajak_dimulai = request.POST["pajak_dimulai"]
+    kendaraan.servis_setiap_berapa_hari = int(request.POST["servis_setiap_berapa_hari"])
+    kendaraan.servis_dimulai = request.POST["servis_dimulai"]        
+    kendaraan.save()
+    return HttpResponse('')
+
