@@ -3,7 +3,7 @@ package com.example.jujojazbase;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +17,14 @@ public class EmailConfirmation extends AppCompatActivity {
     EditText emailConfirm_1, emailConfirm_2, emailConfirm_3, emailConfirm_4;
     TextView textEmail;
     Button verification;
+    String emailFromAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_confirmation);
+
+        emailFromAuth = getIntent().getExtras().get("EMAIL").toString();
 
         getActionBar().setTitle("Verifikasi");
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -34,11 +37,12 @@ public class EmailConfirmation extends AppCompatActivity {
         verification = findViewById(R.id.btnVerification);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onStart() {
         super.onStart();
 
-        textEmail.setText(R.string.textEmailVerification);
+        textEmail.setText(R.string.textEmailVerification + emailFromAuth);
 
         verification.setOnClickListener(new View.OnClickListener() {
             @Override

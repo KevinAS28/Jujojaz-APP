@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class Auth extends AppCompatActivity {
+public class Auth extends AppCompatActivity implements View.OnClickListener {
     EditText email, password;
     TextView signUp;
     Button signIn;
+    Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,30 +23,28 @@ public class Auth extends AppCompatActivity {
 
         email = findViewById(R.id.emailEText);
         password = findViewById(R.id.passEText);
+
         signUp = findViewById(R.id.textSignUp);
+        signUp.setOnClickListener(this);
+
         signIn = findViewById(R.id.btnSignIn);
+        signIn.setOnClickListener(this);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        signIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnSignIn :
                 Log.d("Auth", v.toString());
-                Intent intent = new Intent(getApplicationContext(), Home.class);
+                intent = new Intent(getApplicationContext(), Home.class);
+                intent.putExtra("EMAIL", email.getText().toString().trim());
                 startActivity(intent);
-            }
-        });
-
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case  R.id.textSignUp :
                 Log.d("Auth", v.toString());
-                Intent intent = new Intent(getApplicationContext(), SignUp.class);
+                intent = new Intent(getApplicationContext(), SignUp.class);
                 startActivity(intent);
-            }
-        });
+                break;
+        }
     }
 }
