@@ -3,6 +3,7 @@ package com.example.jujojazbase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,11 +15,14 @@ public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerVie
 
     public static class viewHolder extends RecyclerView.ViewHolder {
 
-        TextView textView;
+        TextView name, detail;
+        ImageView foto;
 
-        public viewHolder(TextView v) {
-            super(v);
-            textView = v;
+        public viewHolder(View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.name);
+            detail = itemView.findViewById(R.id.detail);
+            foto = itemView.findViewById(R.id.foto);
         }
     }
 
@@ -30,14 +34,14 @@ public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerVie
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TextView v = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_home, parent, false);
+                .inflate(R.layout.item_list_home , parent, false);
         viewHolder vh = new viewHolder(v);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        holder.textView.setText(data[position]);
+        //wait
     }
 
     @Override
