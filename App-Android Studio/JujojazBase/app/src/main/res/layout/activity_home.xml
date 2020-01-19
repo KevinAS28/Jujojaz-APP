@@ -31,4 +31,10 @@
         android:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_add_black_30dp" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </RelativeLayout>

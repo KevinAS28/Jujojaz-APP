@@ -7,14 +7,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
 public class Home extends AppCompatActivity {
-    FloatingActionButton fab;
-    Toolbar toolbar;
+    private FloatingActionButton fab;
+    private Toolbar toolbar;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private String[] data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,14 @@ public class Home extends AppCompatActivity {
             }
         });
 
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new adapterRecyclerView(data);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
