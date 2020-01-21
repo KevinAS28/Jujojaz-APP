@@ -1,4 +1,4 @@
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 
 import android.Manifest.permission.*
 import android.app.Activity
@@ -9,17 +9,17 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Paint
 import android.os.Build
-import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.telephony.TelephonyManager
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import com.kevinas.mitramecash.json.JSONObject
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
+import json.*;
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -27,6 +27,7 @@ import java.util.*
 
 class AndroidLib() : AppCompatActivity() {
     companion object {
+
         var mainActivity: Activity? = null
             set(value) {
                 field = value;
@@ -111,13 +112,19 @@ class AndroidLib() : AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-        window.setStatusBarColor(ContextCompat.getColor(context!!, color));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(context!!, color))
+        };
     }
 
 
     fun getStatusBarColor(): String {
         var window: Window = activity!!.window;
-        var color: Int = window.statusBarColor;
+        var color: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor
+        } else {
+            TODO("VERSION.SDK_INT < LOLLIPOP")
+        };
         return String.format("", 0xFFFFFF and color);
     }
 
@@ -129,7 +136,9 @@ class AndroidLib() : AppCompatActivity() {
     }
 
     fun restartApp() {
-        this.activity!!.finishAndRemoveTask();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            this.activity!!.finishAndRemoveTask()
+        };
         var intent = activity!!.baseContext.packageManager.getLaunchIntentForPackage(activity!!.baseContext.packageName);
         intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity!!.startActivity(intent);
@@ -144,8 +153,11 @@ class AndroidLib() : AppCompatActivity() {
 
     fun exitAppFull() {
         AndroidLib.mainActivity!!.finish();
-        AndroidLib.mainActivity!!.finishAndRemoveTask()
-        AndroidLib.mainActivity!!.finishAffinity();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AndroidLib.mainActivity!!.finishAndRemoveTask()
+            AndroidLib.mainActivity!!.finishAffinity();
+        }
+
         System.exit(0);
     }
 
@@ -296,26 +308,26 @@ class AndroidLib() : AppCompatActivity() {
         return tv;
     }
 
-    fun imgFull(img: ImageView): View {
-        BaseActivity.fullImage.add(img);
-        var intent = Intent(activity!!, ImageFullScreenActivity::class.java);
-        activity!!.startActivity(intent);
-        return img;
-    }
+//    fun imgFull(img: ImageView): View {
+//        BaseActivity.fullImage.add(img);
+//        var intent = Intent(activity!!, ImageFullScreenActivity::class.java);
+//        activity!!.startActivity(intent);
+//        return img;
+//    }
 
     fun snack(view: View, msg: String) {
         var snack: Snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
         snack.show();
     }
 
-    fun copy(text: String) {
-        (BaseActivity.clipboard)?.primaryClip = ClipData.newPlainText("text", text);
-    }
+//    fun copy(text: String) {
+//        (BaseActivity.clipboard).primaryClip = ClipData.newPlainText("text", text);
+//    }
 
-    fun copySnack(text: String, msg: String = "Copied", view: View) {
-        this.copy(text);
-        this.snack(view, msg);
-    }
+//    fun copySnack(text: String, msg: String = "Copied", view: View) {
+//        this.copy(text);
+//        this.snack(view, msg);
+//    }
 
     fun getLoading(
         title: String,
@@ -334,7 +346,9 @@ class AndroidLib() : AppCompatActivity() {
         var builder = AlertDialog.Builder(this.activity);
         builder.setTitle(title);
         builder.setMessage(msg);
-        builder.setView(R.layout.activity_loading_portrait);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setView(R.layout.activity_loading_portrait)
+        };
         var build = builder.create();
         build.setCancelable(cancelAble);
         return build;

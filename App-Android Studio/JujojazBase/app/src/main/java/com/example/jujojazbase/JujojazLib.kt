@@ -1,9 +1,9 @@
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 
 import android.app.Activity
 import android.content.Context
 import android.provider.Settings
-import com.kevinas.mitramecash.json.*;
+import json.*;
 
 open class JujojazLib:Network<ByteArray>{
     var andLib: AndroidLib = AndroidLib();
@@ -38,7 +38,7 @@ open class JujojazLib:Network<ByteArray>{
         json.put("appid", "");
         json.put("timestamp", "");
         json.put("signature", "");
-        this.send(Configuration.serverIP, Configuration.serverPort, json.toString().toByteArray(), delay);
+        this.send(Configuration.serverIP, Configuration.serverPort, json.toString().toByteArray().toList(), delay);
     }
     fun logout(){
             andLib.delete(Configuration.listFile.get("dat")!!);

@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
-public class Home extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private Toolbar toolbar;
     private RecyclerView recyclerView;

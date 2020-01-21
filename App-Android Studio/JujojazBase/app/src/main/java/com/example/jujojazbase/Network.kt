@@ -1,4 +1,4 @@
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 import kotlinx.coroutines.delay
 import java.io.*
 import java.net.HttpURLConnection
@@ -10,10 +10,10 @@ open class Network<ResultType>{
     var dest = "127.0.0.1";
     var port = 80;
 
-    //you implemented it by anonymous class
     open fun <resultType>onDone(result: resultType){
 
     }
+    
     open fun onDone(){
 
     }
@@ -28,7 +28,8 @@ open class Network<ResultType>{
     var error: String = "";
     var errorSig: Boolean = false;
 
-    inner class NetSend(var dest:String, var port: Int, var buffer: ByteArray, var delayMills: Long=0) : android.os.AsyncTask<String, String, ByteArray>() {
+    
+    inner class NetSend(var dest:String, var port: Int, var buffer: List<Byte>, var delayMills: Long=0) : android.os.AsyncTask<String, String, List<Byte>>() {
         var sock: Socket? = null;
 
         override fun onPreExecute() {
@@ -36,7 +37,7 @@ open class Network<ResultType>{
             onLoading();
         }
 
-        override fun doInBackground(vararg p0: String?): ByteArray {
+        override fun doInBackground(vararg p0: String?): List<Byte> {
 
             try {
                 this.sock = Socket(dest, port);
@@ -44,19 +45,19 @@ open class Network<ResultType>{
                 var inputStream:InputStream;
                 outputStream = this.sock!!.getOutputStream();
                 inputStream =  this.sock!!.getInputStream();
-                outputStream.write(buffer);
-                return inputStream.readBytes();
+                outputStream.write(buffer.toByteArray());
+                return inputStream.readBytes().toList();
                 errorSig = false;
             }catch(e: Exception){
                 var msg: String = "Error while connecting to server: " + e.toString();
                 errorSig = true;
                 error = msg;
                 onError(msg);
-                return byteArrayOf();
+                return listOf<Byte>();
             }
         }
 
-        override fun onPostExecute(result: ByteArray?) {
+        override fun onPostExecute(result: List<Byte>?) {
             super.onPostExecute(result)
             if (errorSig){
                 onError(error);
@@ -67,11 +68,11 @@ open class Network<ResultType>{
             }
         }
     }
-    inner class NetSendUrl(): android.os.AsyncTask<String, String, ByteArray>(){
-        var buffer: ByteArray? = null;
+    inner class NetSendUrl(): android.os.AsyncTask<String, String, List<Byte>>(){
+        var buffer: List<Byte>? = null;
         var url: String? = null;
         var delay:Long? = null
-        constructor(url: String, buffer: ByteArray, delayMills: Long=0) : this() {
+        constructor(url: String, buffer: List<Byte>, delayMills: Long=0) : this() {
             this.buffer = buffer;
             this.url = url;
             this.delay = delayMills;
@@ -80,27 +81,29 @@ open class Network<ResultType>{
             super.onPreExecute()
             onLoading();
         }
-
-        override fun doInBackground(vararg p0: String?): ByteArray {
+        
+        override fun doInBackground(vararg p0: String?): List<Byte> {
             var url:URL;
             var connection: HttpURLConnection;
             try{
                 url = URL(this.url);
                 connection = url.openConnection() as HttpURLConnection;
                 connection.requestMethod = "POST";
-                connection.outputStream.write(this.buffer);
-                var result = connection.inputStream.readBytes();
+                var temp = byteArrayOf();
+                connection.outputStream.write(temp);
+                this.buffer = temp.toList();
+                var result = connection.inputStream.readBytes().toList();
                 connection.disconnect();
                 errorSig = false;
                 return result;
             }catch (e: Exception){
                 onError("Connection fail: "+e.toString());
                 errorSig = true;
-                return byteArrayOf();
+                return listOf<Byte>();
             }
         }
 
-        override fun onPostExecute(result: ByteArray?) {
+        override fun onPostExecute(result: List<Byte>?) {
             super.onPostExecute(result)
             Thread.sleep(delay!!);
             if (errorSig){
@@ -136,18 +139,18 @@ open class Network<ResultType>{
     }
 
 
-    fun send(dest:String, port: Int, buffer: ByteArray, delayMills: Long=0): android.os.AsyncTask<String, String, ByteArray>{
+    fun send(dest:String, port: Int, buffer: List<Byte>, delayMills: Long=0): android.os.AsyncTask<String, String, List<Byte>>{
         this.dest = dest;
         this.port = port;
-        var net: android.os.AsyncTask<String, String, ByteArray> = NetSend(dest, port, buffer, delayMills);
+        var net: android.os.AsyncTask<String, String, List<Byte>> = NetSend(dest, port, buffer, delayMills);
         net.execute();
         return net;
     }
-    fun send(dest:String, buffer: ByteArray, delayMills: Long): android.os.AsyncTask<String, String, ByteArray>{
+    fun send(dest:String, buffer: List<Byte>, delayMills: Long): android.os.AsyncTask<String, String, List<Byte>>{
         return this.send(dest, port, buffer, delayMills);
     }
-    fun sendUrl(url: String, buffer: ByteArray, delay: Long): android.os.AsyncTask<String, String, ByteArray>{
-        var net: android.os.AsyncTask<String, String, ByteArray> = NetSendUrl(url, buffer, delay);
+    fun sendUrl(url: String, buffer: List<Byte>, delay: Long): android.os.AsyncTask<String, String, List<Byte>>{
+        var net: android.os.AsyncTask<String, String, List<Byte>> = NetSendUrl(url, buffer, delay);
         net.execute();
         return net;
     }

@@ -1,4 +1,4 @@
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec

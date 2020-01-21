@@ -1,9 +1,8 @@
 //library lama
 
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 
-import com.kevinas.mitramecash.json.JSONArray
-import com.kevinas.mitramecash.json.JSONObject
+
 import java.io.*
 import java.nio.CharBuffer
 import java.nio.charset.Charset
@@ -11,7 +10,7 @@ import java.util.ArrayList
 import java.util.Arrays
 import java.util.Formatter
 import java.util.HashMap
-
+import json.*;
 class Lib {
 
     companion object {

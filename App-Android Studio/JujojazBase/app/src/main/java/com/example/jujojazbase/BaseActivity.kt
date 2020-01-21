@@ -1,16 +1,17 @@
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 
 import android.app.Activity
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+
 import android.os.Bundle
 import android.os.Handler
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import com.kevinas.mitramecash.json.*
+import androidx.appcompat.app.AppCompatActivity
+import json.*;
 
 open class BaseActivity : AppCompatActivity() {
     var aes: AES = AES();
@@ -22,13 +23,13 @@ open class BaseActivity : AppCompatActivity() {
         var version = "-1";
     }
 
-    fun homeActivity(context: Context, data: JSONObject){
-        val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.fadein)
-        anim.duration = 500
-        anim.start();
-        var homeIntent = Intent(this, HomeActivity::class.java);
-        activity!!.startActivity(homeIntent);
-    }
+//    fun homeActivity(context: Context, data: JSONObject){
+//        val anim = AnimationUtils.loadAnimation(applicationContext, R.anim.fadein)
+//        anim.duration = 500
+//        anim.start();
+//        var homeIntent = Intent(this, HomeActivity::class.java);
+//        activity!!.startActivity(homeIntent);
+//    }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         when (requestCode) {
@@ -54,29 +55,17 @@ open class BaseActivity : AppCompatActivity() {
     fun fileName(callName: String): String {
         return Configuration.listFile.get(callName)!!;
     }
-    var x = aes;
-    inline var Temp.fooProperty: Boolean
 
-        get() = x.ALGORITHM == ""
-
-        set(x) {
-
-            // set field here
-
-        }
-//    var x.fooProperty: Boolean
-//
-//        inline get() = x.fooValue == CONST_FOO
     fun baseActivity(){
         setContentView(R.layout.activity_loading_main__portrait);
         Handler().postDelayed({
             BaseActivity.clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?;
-            var loginIntent = Intent(this, LoginActivity::class.java);
+            var loginIntent = Intent(this, Auth::class.java);
             var homeIntent = Intent(this, HomeActivity::class.java);
 
             try {
                 var loginDat = JSONObject(andLib.readFile(fileName("dat")));
-                var net = object : LoginActivity() {
+                var net = object : Auth() {
                     override fun loginApiSucceed(data: JSONObject) {
                         try {
 
@@ -90,19 +79,19 @@ open class BaseActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun loginApiError(msg: String) {
-                        var intent = Intent(
-                            this@BaseActivity,
-                            DisconnectedActivity::class.java
-                        );
-                        activity!!.startActivity(intent);
-                    }
+//                    override fun loginApiError(msg: String) {
+//                        var intent = Intent(
+//                            this@BaseActivity,
+//                            DisconnectedActivity::class.java
+//                        );
+//                        activity!!.startActivity(intent);
+//                    }
 
                     override fun loginApiFail() {
                         activity!!.startActivity(loginIntent);
                     }
                 }
-                net.andLib = this.andLib!!;
+//                net.andLib = this.andLib!!;
                 net.loginApi(loginDat.get("userID") as String, loginDat.get("pass") as String, true);
 
             } catch (e: JSONException) {

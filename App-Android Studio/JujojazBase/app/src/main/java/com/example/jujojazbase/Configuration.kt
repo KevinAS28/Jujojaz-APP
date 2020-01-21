@@ -1,4 +1,4 @@
-package com.kevinas.mitramecash
+package com.example.jujojazbase;
 
 import java.util.HashMap
 

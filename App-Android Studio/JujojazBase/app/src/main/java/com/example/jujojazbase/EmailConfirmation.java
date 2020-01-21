@@ -48,7 +48,7 @@ public class EmailConfirmation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("EmailConfirmation", v.toString());
-                Intent intent = new Intent(EmailConfirmation.this, Home.class);
+                Intent intent = new Intent(EmailConfirmation.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
