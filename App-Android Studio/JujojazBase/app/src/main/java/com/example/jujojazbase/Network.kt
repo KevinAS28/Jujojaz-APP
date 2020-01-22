@@ -69,10 +69,10 @@ open class Network<ResultType>{
         }
     }
     inner class NetSendUrl(): android.os.AsyncTask<String, String, List<Byte>>(){
-        var buffer: List<Byte>? = null;
+        var buffer: Array<Byte>? = null;
         var url: String? = null;
         var delay:Long? = null
-        constructor(url: String, buffer: List<Byte>, delayMills: Long=0) : this() {
+        constructor(url: String, buffer: Array<Byte>, delayMills: Long=0) : this() {
             this.buffer = buffer;
             this.url = url;
             this.delay = delayMills;
@@ -89,9 +89,9 @@ open class Network<ResultType>{
                 url = URL(this.url);
                 connection = url.openConnection() as HttpURLConnection;
                 connection.requestMethod = "POST";
-                var temp = byteArrayOf();
-                connection.outputStream.write(temp);
-                this.buffer = temp.toList();
+//                var temp = byteArrayOf();
+                connection.outputStream.write(buffer as ByteArray)
+//                this.buffer = temp.toList();
                 var result = connection.inputStream.readBytes().toList();
                 connection.disconnect();
                 errorSig = false;
@@ -149,9 +149,10 @@ open class Network<ResultType>{
     fun send(dest:String, buffer: List<Byte>, delayMills: Long): android.os.AsyncTask<String, String, List<Byte>>{
         return this.send(dest, port, buffer, delayMills);
     }
-    fun sendUrl(url: String, buffer: List<Byte>, delay: Long): android.os.AsyncTask<String, String, List<Byte>>{
+    fun sendUrl(url: String, buffer: Array<Byte>, delay: Long): android.os.AsyncTask<String, String, List<Byte>>{
         var net: android.os.AsyncTask<String, String, List<Byte>> = NetSendUrl(url, buffer, delay);
         net.execute();
+
         return net;
     }
 }
