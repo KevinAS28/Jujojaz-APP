@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/background_auth"
     tools:context=".AddVehicle">
 
     <LinearLayout
@@ -23,30 +24,83 @@
         <EditText
             android:id="@+id/textFrom"
             android:hint="@string/hintFrom"
+            android:textColorHint="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"/>
 
         <EditText
             android:id="@+id/textCarName"
             android:hint="@string/hintCarName"
+            android:textColorHint="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"/>
+
         <EditText
             android:id="@+id/textSubject"
-            android:hint="@string/hintSubject"
+            android:hint="@string/hintDesc"
+            android:textColorHint="@android:color/white"
             android:inputType="textMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="6"/>
+            android:layout_weight="15"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/imagePictText"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src=""
+                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp" />
+
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src=""/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/imagePict"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="30" />
+            android:layout_weight="25" />
 
     </LinearLayout>
 
@@ -59,6 +113,5 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_add_black_30dp"
         android:layout_alignParentEnd="true" />
-
 
 </RelativeLayout>
