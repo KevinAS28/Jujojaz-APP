@@ -78,7 +78,9 @@
             android:layout_marginBottom="10dp"
             android:text="@string/SignIn"
             android:textAllCaps="false"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="onClick"
+        />
 
         <TextView
             android:id="@+id/textDontHave"
