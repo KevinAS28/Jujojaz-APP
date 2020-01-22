@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import json.JSONObject;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Auth extends AppCompatActivity implements View.OnClickListener {
     EditText email, password;
@@ -18,7 +21,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     Button signIn;
     Intent intent;
 
-    public void loginApiFail(){
+    public void loginApiFail(JSONObject data){
 
     }
 
@@ -27,6 +30,22 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void loginApiError(String msg){
+
+    }
+
+    public void loginSucceed(JSONObject data){
+        intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.putExtra("EMAIL", email.getText().toString().trim());
+        startActivity(intent);
+    }
+
+    public void loginFail(JSONObject data){
+        intent = new Intent(getApplicationContext(), EmailConfirmation.class);
+        intent.putExtra("EMAIL", email.getText().toString().trim());
+        startActivity(intent);
+    }
+
+    public void loginError(String msg){
 
     }
 
@@ -46,10 +65,16 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
 
 
     }
+    public Byte[] byteToByte(byte[] bytes){
+        Byte[] toreturn = new Byte[bytes.length];
+        for (byte i : bytes){
+            toreturn[i] = bytes[i];
+        }
+        return toreturn;
+    }
 
 
-
-    public JSONObject loginApi(String username, String password, Boolean apiOnly){
+    public JSONObject loginApi(String username, String password, final Boolean apiOnly){
         JujojazLib net = new JujojazLib(){
 
             @Override
@@ -57,43 +82,40 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
 
                 JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte ((Byte[])((java.util.List<Byte>) x).toArray()) ));
                 if (data.get("success")=="true"){
-                    intent = new Intent(getApplicationContext(), HomeActivity.class);
-                    intent.putExtra("EMAIL", email.getText().toString().trim());
-                    startActivity(intent);
+                    loginApiSucceed(data);
+                    if (!apiOnly){
+                        loginSucceed(data);
+                    }
                 }
                 else{
-                    intent = new Intent(getApplicationContext(), EmailConfirmation.class);
-                    intent.putExtra("EMAIL", email.getText().toString().trim());
-                    startActivity(intent);
+                    loginApiFail(data);
+                    if (!apiOnly){
+                        loginFail(data);
+                    }
                 }
-
             }
 
+            @Override
+            public void onError(String msg){
 
+            }
         };
         JSONObject authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
+        net.sendUrl("http://127.0.0.1:8080/api/allvehicles/", byteToByte(authJson.toString().getBytes()) , 0);
         return authJson;
     }
+
+
     public JSONObject loginApi(String username, String password){
         return loginApi(username, password, true);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btnSignIn :
-                Log.d("Auth", v.toString());
-                intent = new Intent(getApplicationContext(), HomeActivity.class);
-                intent.putExtra("EMAIL", email.getText().toString().trim());
-                startActivity(intent);
-                break;
-            case  R.id.textSignUp :
-                Log.d("Auth", v.toString());
-                intent = new Intent(getApplicationContext(), SignUp.class);
-                startActivity(intent);
-                break;
-        }
+        String username = ((EditText)findViewById(R.id.emailEText)).getText().toString();
+        String password = ((EditText)findViewById(R.id.passEText)).getText().toString();
+        loginApi(username, password, false);
     }
 }
