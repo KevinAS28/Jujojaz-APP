@@ -87,9 +87,9 @@ open class BaseActivity : AppCompatActivity() {
 //                        activity!!.startActivity(intent);
 //                    }
 
-                    override fun loginApiFail() {
-                        activity!!.startActivity(loginIntent);
-                    }
+//                    override fun loginApiFail(msg: String) {
+//                        activity!!.startActivity(loginIntent);
+//                    }
                 }
 //                net.andLib = this.andLib!!;
                 net.loginApi(loginDat.get("userID") as String, loginDat.get("pass") as String, true);
