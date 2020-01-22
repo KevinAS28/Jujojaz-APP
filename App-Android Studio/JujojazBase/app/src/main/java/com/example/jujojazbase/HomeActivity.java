@@ -20,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private String[] data;
+    private String[][] data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

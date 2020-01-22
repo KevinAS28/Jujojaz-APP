@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerView.viewHolder> {
-    private String[] data;
+    private String[][] data;
 
 
     public static class viewHolder extends RecyclerView.ViewHolder {
@@ -26,7 +26,7 @@ public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerVie
         }
     }
 
-    public adapterRecyclerView(String[] myData) {
+    public adapterRecyclerView(String[][] myData) {
         this.data = myData;
     }
 
@@ -41,7 +41,10 @@ public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        //wait
+        String[] dataset = data[position];
+        holder.foto.findViewById(Integer.parseInt(dataset[0]));
+        holder.name.findViewById(Integer.parseInt(dataset[1]));
+        holder.detail.findViewById(Integer.parseInt(dataset[2]));
     }
 
     @Override
