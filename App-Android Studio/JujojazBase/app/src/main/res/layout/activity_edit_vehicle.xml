@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
+        <androidx.appcompat.wget.Toolbar
             android:id="@+id/toolBar"
             app:title="My Own Car"
             android:minHeight="?attr/actionBarSize"
@@ -23,7 +23,7 @@
             android:background="@color/colorPrimaryTransparent"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewHome"
+            android:id="@+id/recyclerViewEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
