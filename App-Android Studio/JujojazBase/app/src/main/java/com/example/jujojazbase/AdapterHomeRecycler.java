@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerView.viewHolder> {
+public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycler.viewHolder> {
     private String[][] data;
 
 
@@ -26,7 +26,7 @@ public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerVie
         }
     }
 
-    public adapterRecyclerView(String[][] myData) {
+    public AdapterHomeRecycler(String[][] myData) {
         this.data = myData;
     }
 
