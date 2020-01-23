@@ -15,6 +15,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolBarAdd"
             app:title="Add New Car"
+            android:minHeight="?attr/actionBarSize"
             app:titleTextColor="@android:color/white"
             android:background="@color/colorPrimary"
             android:layout_width="match_parent"
@@ -105,12 +106,12 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="#34eb67"
         app:srcCompat="@drawable/ic_add_black_30dp"
         android:layout_alignParentEnd="true" />
 
