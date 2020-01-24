@@ -30,4 +30,8 @@
     <string name="menuNotification">notification</string>
     <string name="imagePictText">Picture</string>
     <string name="titleAbout">about</string>
+    <string name="textMerk">\tMerk</string>
+    <string name="textKuitansi">\tKuitansi Servis</string>
+    <string name="textPajak">\tTmt. Pajak</string>
+    <string name="textServis">\tTmt. Servis</string>
 </resources>
