@@ -13,7 +13,7 @@
     <string name="titleSend">Send</string>
     <string name="hintFrom">From</string>
     <string name="hintCarName">Car Name</string>
-    <string name="hintSubject">Subject</string>
+    <string name="hintDesc">Description</string>
     <string name="nameCar">Lamborghini</string>
     <string name="SignIn">Sign in</string>
     <string name="textDontHave">Don\'t have an account?</string>
@@ -28,4 +28,6 @@
     <string name="textEmailVerification">Kode Verifikasi telah dikirim melalui Email ke </string>
     <string name="menuSearch">search</string>
     <string name="menuNotification">notification</string>
+    <string name="imagePictText">Picture</string>
+    <string name="titleAbout">about</string>
 </resources>

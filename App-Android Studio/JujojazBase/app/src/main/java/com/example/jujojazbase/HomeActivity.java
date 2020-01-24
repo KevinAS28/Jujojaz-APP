@@ -40,19 +40,19 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerViewHome);
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new adapterRecyclerView(data);
+        adapter = new AdapterHomeRecycler(data);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 }

@@ -15,4 +15,10 @@
         android:title="@string/menuNotification"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/menuAbout"
+        android:icon="@mipmap/account"
+        android:title="@string/titleAbout"
+        app:showAsAction="ifRoom"/>
+
 </menu>

@@ -9,38 +9,37 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class adapterRecyclerView extends RecyclerView.Adapter<adapterRecyclerView.viewHolder> {
-    private String[][] data;
-
+public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycler.viewHolder> {
+    String[][] data;
 
     public static class viewHolder extends RecyclerView.ViewHolder {
 
         TextView name, detail;
         ImageView foto;
 
-        public viewHolder(View itemView) {
+        public viewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.name);
-            detail = itemView.findViewById(R.id.detail);
-            foto = itemView.findViewById(R.id.foto);
+            name = itemView.findViewById(R.id.nameEdit);
+            detail = itemView.findViewById(R.id.detailEdit);
+            foto = itemView.findViewById(R.id.fotoEdit);
         }
     }
 
-    public adapterRecyclerView(String[][] myData) {
+    public AdapterEditRecycler(String[][] myData) {
         this.data = myData;
     }
 
     @NonNull
     @Override
-    public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterEditRecycler.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         TextView v = (TextView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_home , parent, false);
-        viewHolder vh = new viewHolder(v);
+                .inflate(R.layout.item_list_edit , parent, false);
+        AdapterEditRecycler.viewHolder vh = new AdapterEditRecycler.viewHolder(v);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterEditRecycler.viewHolder holder, int position) {
         String[] dataset = data[position];
         holder.foto.findViewById(Integer.parseInt(dataset[0]));
         holder.name.findViewById(Integer.parseInt(dataset[1]));

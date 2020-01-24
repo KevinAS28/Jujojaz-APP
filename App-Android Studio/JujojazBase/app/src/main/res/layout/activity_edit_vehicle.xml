@@ -5,80 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@mipmap/background_auth"
     tools:context=".EditVehicle">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolBar"
-        app:title="My Own Car"
-        android:minHeight="?attr/actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleTextColor="@android:color/white"
-        android:background="@color/colorPrimary"/>
-
     <LinearLayout
-        android:id="@+id/linearEdVehicle"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/toolBar">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageCar"
+        <androidx.appcompat.wget.Toolbar
+            android:id="@+id/toolBar"
+            app:title="My Own Car"
+            android:minHeight="?attr/actionBarSize"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"/>
+            android:layout_height="wrap_content"
+            app:titleTextColor="@android:color/white"
+            android:background="@color/colorPrimaryTransparent"/>
 
-        <TextView
-            android:id="@+id/nameCar"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEdit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/nameCar"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/item_list_edit" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/ownCarText"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ownCarText"
-        android:textSize="25sp"
-        android:gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_below="@+id/linearEdVehicle"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_below="@+id/ownCarText">
-
-        <ImageView
-            android:id="@+id/imageOwnCar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="3"/>
-
-        <TextView
-            android:id="@+id/emailOwnCar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/emailOwnCar"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="#34eb67"
+        app:srcCompat="@drawable/ic_add_black_30dp"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
