@@ -34,6 +34,7 @@ open class JujojazLib:Network<ByteArray>{
     fun hitMainApi(json: JSONObject, contextUrl: String){
         this.hitMainApi(json, contextUrl, 0);
     }
+
     fun hitMainApi(json: JSONObject, contextUrl: String, delay: Long){
         json.put("appid", "");
         json.put("timestamp", "");

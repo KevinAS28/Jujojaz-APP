@@ -10,7 +10,7 @@ open class Network<ResultType>{
     var dest = "127.0.0.1";
     var port = 80;
 
-    open fun <resultType>onDone(result: resultType){
+    open fun onDone(result: List<Byte>){
 
     }
     
@@ -57,7 +57,7 @@ open class Network<ResultType>{
             }
         }
 
-        override fun onPostExecute(result: List<Byte>?) {
+        override fun onPostExecute(result: List<Byte>) {
             super.onPostExecute(result)
             if (errorSig){
                 onError(error);
@@ -86,11 +86,15 @@ open class Network<ResultType>{
             var url:URL;
             var connection: HttpURLConnection;
             try{
+                System.out.println("doInBackground() called")
                 url = URL(this.url);
+                System.out.println("url object created")
                 connection = url.openConnection() as HttpURLConnection;
+                System.out.println("url object created")
                 connection.requestMethod = "POST";
 //                var temp = byteArrayOf();
-                connection.outputStream.write(buffer as ByteArray)
+                System.out.println("Data send: " + String(buffer!!.toByteArray()));
+                connection.outputStream.write(buffer!!.toByteArray())
 //                this.buffer = temp.toList();
                 var result = connection.inputStream.readBytes().toList();
                 connection.disconnect();
@@ -103,13 +107,12 @@ open class Network<ResultType>{
             }
         }
 
-        override fun onPostExecute(result: List<Byte>?) {
+        override fun onPostExecute(result: List<Byte>) {
             super.onPostExecute(result)
             Thread.sleep(delay!!);
             if (errorSig){
                 onError(error);
             }else{
-                resultData = result as? ResultType;
                 onDone();
                 onDone(result);
             }
@@ -150,9 +153,9 @@ open class Network<ResultType>{
         return this.send(dest, port, buffer, delayMills);
     }
     fun sendUrl(url: String, buffer: Array<Byte>, delay: Long): android.os.AsyncTask<String, String, List<Byte>>{
+        System.out.println("sendUrl(s, ba, d) called")
         var net: android.os.AsyncTask<String, String, List<Byte>> = NetSendUrl(url, buffer, delay);
         net.execute();
-
         return net;
     }
 }

@@ -34,6 +34,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void loginSucceed(JSONObject data){
+
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("EMAIL", email.getText().toString().trim());
         startActivity(intent);
@@ -52,6 +53,8 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_auth);
 
         email = findViewById(R.id.emailEText);
@@ -67,7 +70,8 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     }
     public Byte[] byteToByte(byte[] bytes){
         Byte[] toreturn = new Byte[bytes.length];
-        for (byte i : bytes){
+        System.out.println("From length: " + String.valueOf(bytes.length));
+        for (int i = 0; i < bytes.length; i++){
             toreturn[i] = bytes[i];
         }
         return toreturn;
@@ -78,32 +82,39 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         JujojazLib net = new JujojazLib(){
 
             @Override
-            public <List> void onDone(List x)  {
-
-                JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte ((Byte[])((java.util.List<Byte>) x).toArray()) ));
-                if (data.get("success")=="true"){
+            public  void onDone(List<Byte> x)  {
+                Byte[] byteArray = new Byte[x.size()];
+                x.toArray(byteArray);
+                JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte (byteArray) ));
+                System.out.println(data.toString());
+                if (data.get("success").equals("true")){
                     loginApiSucceed(data);
                     if (!apiOnly){
                         loginSucceed(data);
                     }
                 }
                 else{
+                    System.out.println("Fail");
                     loginApiFail(data);
                     if (!apiOnly){
                         loginFail(data);
                     }
                 }
+
             }
+
+
 
             @Override
             public void onError(String msg){
-
+                System.out.println("ERROR: " + msg);
             }
         };
         JSONObject authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
-        net.sendUrl("http://127.0.0.1:8080/api/allvehicles/", byteToByte(authJson.toString().getBytes()) , 0);
+        net.sendUrl("http://10.0.2.2:8080/api/allvehicles/", byteToByte(("data="+authJson.toString()).getBytes()) , 0);
+
         return authJson;
     }
 
