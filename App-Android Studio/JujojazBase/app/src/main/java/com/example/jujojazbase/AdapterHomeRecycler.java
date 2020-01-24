@@ -1,5 +1,6 @@
 package com.example.jujojazbase;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,14 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
 
         TextView name, detail;
         ImageView foto;
+        ImageView btnMoreThan;
 
         public viewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             detail = itemView.findViewById(R.id.detail);
             foto = itemView.findViewById(R.id.foto);
+            btnMoreThan = itemView.findViewById(R.id.btnMoreThan);
         }
     }
 
@@ -40,11 +43,17 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final viewHolder holder, int position) {
         String[] dataset = data[position];
-        holder.foto.findViewById(Integer.parseInt(dataset[0]));
-        holder.name.findViewById(Integer.parseInt(dataset[1]));
-        holder.detail.findViewById(Integer.parseInt(dataset[2]));
+        holder.foto.setImageResource(Integer.parseInt(dataset[0]));
+        holder.name.setText(dataset[1]);
+        holder.detail.setText(dataset[2]);
+        holder.btnMoreThan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btnMoreThan", String.valueOf(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override

@@ -34,7 +34,8 @@
 
     </LinearLayout>
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/btnMoreThan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="3"

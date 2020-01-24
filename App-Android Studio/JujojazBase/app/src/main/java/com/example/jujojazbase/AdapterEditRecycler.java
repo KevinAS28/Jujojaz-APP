@@ -1,8 +1,11 @@
 package com.example.jujojazbase;
 
+import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,12 +19,14 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
 
         TextView name, detail;
         ImageView foto;
+        ImageButton btnDown;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.nameEdit);
             detail = itemView.findViewById(R.id.detailEdit);
             foto = itemView.findViewById(R.id.fotoEdit);
+            btnDown = itemView.findViewById(R.id.btnDown);
         }
     }
 
@@ -39,11 +44,17 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterEditRecycler.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final AdapterEditRecycler.viewHolder holder, int position) {
         String[] dataset = data[position];
-        holder.foto.findViewById(Integer.parseInt(dataset[0]));
-        holder.name.findViewById(Integer.parseInt(dataset[1]));
-        holder.detail.findViewById(Integer.parseInt(dataset[2]));
+        holder.foto.setImageResource(Integer.parseInt(dataset[0]));
+        holder.name.setText(dataset[1]);
+        holder.detail.setText(dataset[2]);
+        holder.btnDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("btnDown", String.valueOf(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
