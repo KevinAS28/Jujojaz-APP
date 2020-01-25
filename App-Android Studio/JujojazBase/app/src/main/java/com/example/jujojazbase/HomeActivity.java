@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    private FloatingActionButton fab;
+    private FloatingActionButton fabHome;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -35,8 +35,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         toolbar = findViewById(R.id.homeToolBar);
         setSupportActionBar(toolbar);
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabHome = findViewById(R.id.fabHome);
+        fabHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Home", v.toString());
