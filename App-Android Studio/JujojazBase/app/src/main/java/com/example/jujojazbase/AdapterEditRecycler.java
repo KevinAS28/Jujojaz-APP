@@ -1,6 +1,6 @@
 package com.example.jujojazbase;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +12,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.util.Collections;
+import java.util.List;
+
 public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycler.viewHolder> {
-    String[][] data;
+    public static List<String> data;
+    private Context context;
 
     public static class viewHolder extends RecyclerView.ViewHolder {
 
@@ -30,7 +37,8 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
         }
     }
 
-    public AdapterEditRecycler(String[][] myData) {
+    public AdapterEditRecycler(Context context, List<String> myData) {
+        this.context = context;
         this.data = myData;
     }
 
@@ -45,10 +53,13 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
 
     @Override
     public void onBindViewHolder(@NonNull final AdapterEditRecycler.viewHolder holder, int position) {
-        String[] dataset = data[position];
-        holder.foto.setImageResource(Integer.parseInt(dataset[0]));
-        holder.name.setText(dataset[1]);
-        holder.detail.setText(dataset[2]);
+        List<String> dataset = Collections.singletonList(data.get(position));
+        Glide.with(context)
+                .load(dataset.get(0))
+                .apply(RequestOptions.circleCropTransform())
+                .into(holder.foto);
+        holder.name.setText(dataset.get(1));
+        holder.detail.setText(dataset.get(2));
         holder.btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +70,6 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
     }
 }
