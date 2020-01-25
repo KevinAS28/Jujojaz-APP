@@ -24,7 +24,6 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".EmailConfirmation" />
         <activity android:name=".Auth">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
