@@ -6,21 +6,26 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
-public class HomeActivity extends AppCompatActivity {
-    private FloatingActionButton fab;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    private FloatingActionButton fabHome;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private String[][] data;
+    private List<String> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +35,8 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.homeToolBar);
         //setSupportActionBar(toolbar);
 
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabHome = findViewById(R.id.fabHome);
+        fabHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Home", v.toString());
@@ -46,13 +51,38 @@ public class HomeActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new AdapterHomeRecycler(data);
+        adapter = new AdapterHomeRecycler(this, data);
         recyclerView.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.menuSearch);
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        String userInput =  newText.toLowerCase();
+        List<String> newData = new ArrayList<>();
+        for (String data : data) {
+            if (data.toLowerCase().contains(userInput)) {
+                newData.add(data);
+            }
+        }
+
+        ArrayList<String> adapterData = (ArrayList<String>) AdapterHomeRecycler.data;
+        adapterData.clear();
+        adapterData.addAll(newData);
+        adapter.notifyDataSetChanged();
         return true;
     }
 }
