@@ -27,7 +27,7 @@ SECRET_KEY = 'p01x_0ic%vnrzvs*9)g27c)qbrrbgb_z$6@$3h^7_0m8o0^0ys'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -170,3 +170,5 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
 }
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024000000000000

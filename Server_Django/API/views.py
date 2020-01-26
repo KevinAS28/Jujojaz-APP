@@ -7,9 +7,21 @@ from django.core import serializers
 from django.http import HttpResponse
 from django.forms import ModelForm
 import json
+import base64
+import Server_Django.settings as settings
+import os
 # Create your views here.
 
 
+def test(request):
+    data = json.loads(request.POST['data'])
+    image = data['image']
+    print(data)
+    with open(os.path.join(settings.BASE_DIR, 'image.jpg'), 'wb+') as writer:
+        b64_string = image
+        b64_string += "=" * ((4 - len(b64_string) % 4) % 4) #ugh
+        writer.write(base64.b64decode(b64_string))
+    return HttpResponse('')
 
 @jujojaz_login
 def get_all_vehicle(request):
