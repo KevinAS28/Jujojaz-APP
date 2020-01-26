@@ -3,14 +3,13 @@
 package com.example.jujojazbase;
 
 
-import java.io.*
+import json.JSONArray
+import json.JSONObject
+import java.io.UnsupportedEncodingException
 import java.nio.CharBuffer
 import java.nio.charset.Charset
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Formatter
-import java.util.HashMap
-import json.*;
+import java.util.*
+
 class Lib {
 
     companion object {
@@ -45,6 +44,14 @@ class Lib {
             return yay
         }
 
+        fun byteToByte(bytes: ByteArray): Array<Byte?>? {
+            val toreturn = arrayOfNulls<Byte>(bytes.size)
+            println("From length: " + bytes.size.toString())
+            for (i in bytes.indices) {
+                toreturn[i] = bytes[i]
+            }
+            return toreturn
+        }
 
 
         fun mergeString(any: Array<String>): String {

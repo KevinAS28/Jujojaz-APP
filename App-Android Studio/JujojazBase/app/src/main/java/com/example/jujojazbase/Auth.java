@@ -41,9 +41,9 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void loginFail(JSONObject data){
-        intent = new Intent(getApplicationContext(), EmailConfirmation.class);
-        intent.putExtra("EMAIL", email.getText().toString().trim());
-        startActivity(intent);
+//        intent = new Intent(getApplicationContext(), EmailConfirmation.class);
+//        intent.putExtra("EMAIL", email.getText().toString().trim());
+//        startActivity(intent);
     }
 
     public void loginError(String msg){
@@ -67,14 +67,6 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         signIn.setOnClickListener(this);
 
 
-    }
-    public Byte[] byteToByte(byte[] bytes){
-        Byte[] toreturn = new Byte[bytes.length];
-        System.out.println("From length: " + String.valueOf(bytes.length));
-        for (int i = 0; i < bytes.length; i++){
-            toreturn[i] = bytes[i];
-        }
-        return toreturn;
     }
 
 
@@ -113,7 +105,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         JSONObject authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
-        net.sendUrl("http://10.0.2.2:8080/api/allvehicles/", byteToByte(("data="+authJson.toString()).getBytes()) , 0);
+        net.sendUrl("http://10.0.2.2:8080/api/allvehicles/", Lib.Companion.byteToByte(("data="+authJson.toString()).getBytes()) , 0);
 
         return authJson;
     }

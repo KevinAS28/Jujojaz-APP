@@ -31,8 +31,8 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("SignUp", v.toString());
-                Intent intent = new Intent(getApplicationContext(), EmailConfirmation.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), EmailConfirmation.class);
+//                startActivity(intent);
             }
         });
     }

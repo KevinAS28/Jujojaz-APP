@@ -28,6 +28,7 @@ import json.JSONObject;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddVehicle extends AppCompatActivity {
@@ -74,6 +75,7 @@ public class AddVehicle extends AppCompatActivity {
             }
         });
         builder.show();
+
     }
 
     @Override
@@ -126,9 +128,12 @@ public class AddVehicle extends AppCompatActivity {
                 String picturePath = c.getString(columnIndex);
                 c.close();
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                if (thumbnail==null){
+                    System.out.println("THUMBANAIL NULL");
+                }
                 thumbnail=getResizedBitmap(thumbnail, 400);
                 Log.w("path of image: ", picturePath+"");
-                IDProf.setImageBitmap(thumbnail);
+//                IDProf.setImageBitmap(thumbnail);
                 BitMapToString(thumbnail);
             }
         }
@@ -156,137 +161,158 @@ public class AddVehicle extends AppCompatActivity {
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
-    private void SendDetail() {
+    private void sendDetail() {
         final ProgressDialog loading = new ProgressDialog(AddVehicle.this);
         loading.setMessage("Please Wait...");
         loading.show();
         loading.setCanceledOnTouchOutside(false);
-        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            loading.dismiss();
-                            Log.d("JSON", response);
+        JujojazLib net = new JujojazLib(){
 
-                            JSONObject eventObject = new JSONObject(response);
-                            String error_status = eventObject.getString("error");
-                            if (error_status.equals("true")) {
-                                String error_msg = eventObject.getString("msg");
-                                ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
-                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                                alertDialogBuilder.setTitle("Vendor Detail");
-                                alertDialogBuilder.setCancelable(false);
-                                alertDialogBuilder.setMessage(error_msg);
-                                alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-
-                                    }
-                                });
-                                alertDialogBuilder.show();
-
-                            } else {
-                                String error_msg = eventObject.getString("msg");
-                                ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                                alertDialogBuilder.setTitle("Registration");
-                                alertDialogBuilder.setCancelable(false);
-                                alertDialogBuilder.setMessage(error_msg);
-//                                alertDialogBuilder.setIcon(R.drawable.doubletick);
-                                alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        Intent intent=new Intent(AddVehicle.this, HomeActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-                                alertDialogBuilder.show();
-                            }
-                        }catch(Exception e){
-                            Log.d("Tag", e.getMessage());
-
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
-                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-                            ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
-                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                            alertDialogBuilder.setTitle("No connection");
-                            alertDialogBuilder.setMessage(" Connection time out error please try again ");
-                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            });
-                            alertDialogBuilder.show();
-                        } else if (error instanceof AuthFailureError) {
-                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                            alertDialogBuilder.setTitle("Connection Error");
-                            alertDialogBuilder.setMessage(" Authentication failure connection error please try again ");
-                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            });
-                            alertDialogBuilder.show();
-                            //TODO
-                        } else if (error instanceof ServerError) {
-                            ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
-                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                            alertDialogBuilder.setTitle("Connection Error");
-                            alertDialogBuilder.setMessage("Connection error please try again");
-                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            });
-                            alertDialogBuilder.show();
-                            //TODO
-                        } else if (error instanceof NetworkError) {
-                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                            alertDialogBuilder.setTitle("Connection Error");
-                            alertDialogBuilder.setMessage("Network connection error please try again");
-                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            });
-                            alertDialogBuilder.show();
-                            //TODO
-                        } else if (error instanceof ParseError) {
-                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-                            alertDialogBuilder.setTitle("Error");
-                            alertDialogBuilder.setMessage("Parse error");
-                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            });
-                            alertDialogBuilder.show();
-                        }
-//                        Toast.makeText(Login_Activity.this,error.toString(), Toast.LENGTH_LONG ).show();
-                    }
-                }){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> map = new HashMap<String,String>();
-                //map.put(KEY_User_Document1,Document_img1);
-                System.out.println("GetParams() called");
-                return map;
+            public  void onDone(List<Byte> x)  {
+                loading.dismiss();
+
+            }
+
+
+
+
+
+            @Override
+            public void onError(String msg){
+                loading.dismiss();
+                System.out.println("ERROR: " + msg);
             }
         };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(AddVehicle.this);
-        stringRequest.setRetryPolicy(mRetryPolicy);
-        requestQueue.add(stringRequest);
+        JSONObject dataJson = new JSONObject();
+        dataJson.put("image", Document_img1);
+        net.sendUrl("http://10.0.2.2:8080/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
+//        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        try {
+//                            loading.dismiss();
+//                            Log.d("JSON", response);
+//
+//                            JSONObject eventObject = new JSONObject(response);
+//                            String error_status = eventObject.getString("ercdror");
+//                            if (error_status.equals("true")) {
+//                                String error_msg = eventObject.getString("msg");
+//                                ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
+//                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                                alertDialogBuilder.setTitle("Vendor Detail");
+//                                alertDialogBuilder.setCancelable(false);
+//                                alertDialogBuilder.setMessage(error_msg);
+//                                alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//
+//                                    }
+//                                });
+//                                alertDialogBuilder.show();
+//
+//                            } else {
+//                                String error_msg = eventObject.getString("msg");
+//                                ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
+//                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                                alertDialogBuilder.setTitle("Registration");
+//                                alertDialogBuilder.setCancelable(false);
+//                                alertDialogBuilder.setMessage(error_msg);
+////                                alertDialogBuilder.setIcon(R.drawable.doubletick);
+//                                alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        Intent intent=new Intent(AddVehicle.this, HomeActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//                                });
+//                                alertDialogBuilder.show();
+//                            }
+//                        }catch(Exception e){
+//                            Log.d("Tag", e.getMessage());
+//
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        loading.dismiss();
+//                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+//                            ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
+//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                            alertDialogBuilder.setTitle("No connection");
+//                            alertDialogBuilder.setMessage(" Connection time out error please try again ");
+//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//
+//                                }
+//                            });
+//                            alertDialogBuilder.show();
+//                        } else if (error instanceof AuthFailureError) {
+//                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
+//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                            alertDialogBuilder.setTitle("Connection Error");
+//                            alertDialogBuilder.setMessage(" Authentication failure connection error please try again ");
+//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//
+//                                }
+//                            });
+//                            alertDialogBuilder.show();
+//                            //TODO
+//                        } else if (error instanceof ServerError) {
+//                            ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
+//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                            alertDialogBuilder.setTitle("Connection Error");
+//                            alertDialogBuilder.setMessage("Connection error please try again");
+//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//
+//                                }
+//                            });
+//                            alertDialogBuilder.show();
+//                            //TODO
+//                        } else if (error instanceof NetworkError) {
+//                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
+//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                            alertDialogBuilder.setTitle("Connection Error");
+//                            alertDialogBuilder.setMessage("Network connection error please try again");
+//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//
+//                                }
+//                            });
+//                            alertDialogBuilder.show();
+//                            //TODO
+//                        } else if (error instanceof ParseError) {
+//                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
+//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
+//                            alertDialogBuilder.setTitle("Error");
+//                            alertDialogBuilder.setMessage("Parse error");
+//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//
+//                                }
+//                            });
+//                            alertDialogBuilder.show();
+//                        }
+////                        Toast.makeText(Login_Activity.this,error.toString(), Toast.LENGTH_LONG ).show();
+//                    }
+//                }){
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String,String> map = new HashMap<String,String>();
+//                //map.put(KEY_User_Document1,Document_img1);
+//                System.out.println("GetParams() called");
+//                return map;
+//            }
+//        };
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(AddVehicle.this);
+//        stringRequest.setRetryPolicy(mRetryPolicy);
+//        requestQueue.add(stringRequest);
     }
 
     public void actionButtonClicked(View view){
@@ -295,18 +321,18 @@ public class AddVehicle extends AppCompatActivity {
             selectImage();
         }
         else{
-
-            if (AppStatus.getInstance(this).isOnline()) {
-                SendDetail();
-
-
-                //           Toast.makeText(this,"You are online!!!!",Toast.LENGTH_LONG).show();
-
-            } else {
-
-                Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
-                Log.v("Home", "############################You are not online!!!!");
-            }
+            sendDetail();
+//            if (AppStatus.getInstance(this).isOnline()) {
+//                SendDetail();
+//
+//
+//                //           Toast.makeText(this,"You are online!!!!",Toast.LENGTH_LONG).show();
+//
+//            } else {
+//
+//                Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
+//                Log.v("Home", "############################You are not online!!!!");
+//            }
 
         }
     }
