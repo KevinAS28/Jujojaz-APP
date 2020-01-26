@@ -28,7 +28,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         toolbar = findViewById(R.id.homeToolBar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
