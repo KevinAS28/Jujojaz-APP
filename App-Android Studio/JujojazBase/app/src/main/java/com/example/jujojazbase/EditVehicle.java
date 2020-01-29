@@ -62,15 +62,15 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public boolean onQueryTextChange(String newText) {
         String userInput =  newText.toLowerCase();
-        List<String> newData = new ArrayList<>();
+        List<List<String>> newData = new ArrayList<>();
         for (List<String> data : data) {
             if (data.get(0).toLowerCase().contains(userInput)) {
-                newData.addAll(data);
+                newData.addAll(Collections.singleton(data));
             }
         }
 
         AdapterEditRecycler.data = new ArrayList<>();
-        AdapterEditRecycler.data.addAll(Collections.singleton(newData));
+        AdapterEditRecycler.data.addAll(newData);
         adapter.notifyDataSetChanged();
         return true;
     }

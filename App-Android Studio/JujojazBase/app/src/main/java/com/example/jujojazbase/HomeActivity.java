@@ -85,16 +85,17 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String newText) {
         String userInput =  newText.toLowerCase();
-        List<String> newData = new ArrayList<>();
+        List<List<String>> newData = new ArrayList<>();
         for (List<String> dataset : data) {
             if (dataset.get(1).toLowerCase().contains(userInput)) {
-                newData.addAll(dataset);
+                newData.addAll(Collections.singleton(dataset));
             }
         }
 
         AdapterHomeRecycler.data = new ArrayList<>();
-        AdapterHomeRecycler.data.addAll(Collections.singleton(newData));
+        AdapterHomeRecycler.data.addAll(newData);
         Log.d("Home", AdapterHomeRecycler.data.toString());
+        Log.d("Home", data.toString());
         adapter.notifyDataSetChanged();
         return true;
     }

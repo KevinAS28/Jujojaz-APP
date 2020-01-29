@@ -12,11 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycler.viewHolder> {
-    public static List<List<String>> data;
+    public static List<List<String>> data = new ArrayList<>();
     private Context context;
 
 
@@ -37,7 +37,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
 
     public AdapterHomeRecycler(Context context, List<List<String>> myData) {
         this.context = context;
-        this.data = myData;
+        data = myData;
     }
 
     @NonNull
