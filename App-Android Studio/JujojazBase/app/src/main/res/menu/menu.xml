@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menuSearch"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/menuSearch"
-        app:showAsAction="ifRoom"
+        app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:id="@+id/menuNotification"
         android:icon="@drawable/ic_notifications_white_24dp"
         android:title="@string/menuNotification"
-        app:showAsAction="ifRoom|collapseActionView"
+        app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView"/>
-
-    <item
-        android:id="@+id/menuAbout"
-        android:icon="@mipmap/account"
-        android:title="@string/titleAbout"
-        app:showAsAction="ifRoom"/>
 
 </menu>

@@ -155,9 +155,8 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="#34eb67"
-        app:srcCompat="@drawable/ic_add_black_30dp"
+        app:srcCompat="@drawable/ic_send"
         android:layout_alignParentEnd="true"
-        android:onClick="actionButtonClicked"
     />
 
 </RelativeLayout>
