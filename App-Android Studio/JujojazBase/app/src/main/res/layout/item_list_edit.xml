@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutListEdit"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="2dp"
     android:layout_marginBottom="2dp"
     android:background="@color/colorBlackTransparent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="@color/colorBlackTransparent"
-        android:layout_weight="1">
+        android:background="@color/colorBlackTransparent">
 
         <ImageView
             android:id="@+id/fotoEdit"
@@ -45,17 +45,11 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/white"/>
-
     <ImageButton
         android:id="@+id/btnDown"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="30dp"
         app:srcCompat="@drawable/ic_down_button"
-        android:background="@color/colorBlackTransparent"
-        android:layout_weight="2"/>
+        android:background="@color/colorBlackTransparent"/>
 
 </LinearLayout>

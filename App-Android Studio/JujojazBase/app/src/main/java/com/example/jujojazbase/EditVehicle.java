@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class EditVehicle extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -18,7 +20,7 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<String> data;
+    private List<List<String>> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,11 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
 
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
+
+        String[][] dataset = new String[][] {{"java", "Mulia", "Firmansyah"}, {"java", "World", "Hello"}};
+        data = new ArrayList<>();
+        data.addAll(Collections.singleton(Arrays.asList(dataset[0])));
+        data.addAll(Collections.singleton(Arrays.asList(dataset[1])));
 
         recyclerView = findViewById(R.id.recyclerViewEdit);
         recyclerView.setHasFixedSize(true);
@@ -56,16 +63,16 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
     public boolean onQueryTextChange(String newText) {
         String userInput =  newText.toLowerCase();
         List<String> newData = new ArrayList<>();
-        for (String data : data) {
-            if (data.toLowerCase().contains(userInput)) {
-                newData.add(data);
+        for (List<String> data : data) {
+            if (data.get(0).toLowerCase().contains(userInput)) {
+                newData.addAll(data);
             }
         }
 
-        ArrayList<String> adapterData = (ArrayList<String>) AdapterEditRecycler.data;
-        adapterData.clear();
-        adapterData.addAll(newData);
+        AdapterEditRecycler.data = new ArrayList<>();
+        AdapterEditRecycler.data.addAll(Collections.singleton(newData));
         adapter.notifyDataSetChanged();
         return true;
     }
+
 }

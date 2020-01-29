@@ -1,6 +1,7 @@
 package com.example.jujojazbase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.util.Collections;
 import java.util.List;
 
 public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycler.viewHolder> {
-    public static List<String> data;
+    public static List<List<String>> data;
     private Context context;
 
 
@@ -37,7 +35,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
         }
     }
 
-    public AdapterHomeRecycler(Context context, List<String> myData) {
+    public AdapterHomeRecycler(Context context, List<List<String>> myData) {
         this.context = context;
         this.data = myData;
     }
@@ -45,7 +43,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_home, parent, false);
         viewHolder vh = new viewHolder(v);
         return vh;
@@ -53,17 +51,20 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
 
     @Override
     public void onBindViewHolder(@NonNull final viewHolder holder, int position) {
-        List<String> dataset = Collections.singletonList(data.get(position));
-        Glide.with(context)
-                .load(dataset.get(0))
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.foto);
+        List<String> dataset = data.get(position);
+        //Glide.with(context)
+        //        .load(dataset.get(0))
+        //        .apply(RequestOptions.circleCropTransform())
+        //        .into(holder.foto);
         holder.name.setText(dataset.get(1));
         holder.detail.setText(dataset.get(2));
         holder.btnMoreThan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("btnMoreThan", String.valueOf(holder.getAdapterPosition()));
+                Intent intent = new Intent(context, EditVehicle.class);
+                intent.putExtra("POSITION", holder.getAdapterPosition());
+                context.startActivity(intent);
             }
         });
     }

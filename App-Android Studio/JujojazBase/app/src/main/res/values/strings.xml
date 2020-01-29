@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">JujojazBase</string>
+    <string name="app_name">Jujojaz</string>
     <string name="loginTextV">Login</string>
     <string name="emailText">Email Or Username</string>
     <string name="passText">Password</string>
