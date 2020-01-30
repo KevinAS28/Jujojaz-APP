@@ -13,7 +13,6 @@
         android:id="@+id/menuNotification"
         android:icon="@drawable/ic_notifications_white_24dp"
         android:title="@string/menuNotification"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:showAsAction="ifRoom"/>
 
 </menu>

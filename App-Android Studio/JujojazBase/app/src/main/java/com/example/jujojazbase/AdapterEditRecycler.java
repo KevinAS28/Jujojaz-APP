@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,14 +21,13 @@ import java.util.List;
 public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycler.viewHolder> {
     public static List<List<String>> data;
     private Context context;
-    private boolean btnDownBool = false;
 
     public static class viewHolder extends RecyclerView.ViewHolder {
 
         TextView name, detail;
         ImageView foto;
         ImageButton btnDown;
-        ViewGroup viewGroup;
+        RelativeLayout relativeLayoutEdit;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -35,6 +35,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
             detail = itemView.findViewById(R.id.detailEdit);
             foto = itemView.findViewById(R.id.fotoEdit);
             btnDown = itemView.findViewById(R.id.btnDown);
+            relativeLayoutEdit = itemView.findViewById(R.id.relativeLayoutEdit);
         }
     }
 
@@ -53,7 +54,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AdapterEditRecycler.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final AdapterEditRecycler.viewHolder holder, final int position) {
         List<String> dataset = data.get(position);
         //Glide.with(context)
         //        .load(dataset.get(0))
@@ -64,11 +65,17 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
         holder.btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("btnDown", String.valueOf(holder.getAdapterPosition()));
-                Log.d("btnDown", "Height : " + holder.viewGroup.getLayoutParams().height + "\nWidth : " + holder.viewGroup.getLayoutParams().width);
-                btnDownBool = !btnDownBool;
+                Log.d("AdapterEditRecycler", "btnDown");
+                List<String> datasetBool = data.get(holder.getAdapterPosition());
+                datasetBool.set(3, String.valueOf(!Boolean.valueOf(datasetBool.get(3))));
+                Log.d("AdapterEditRecycler", "dataset : " + datasetBool.toString());
+                notifyItemChanged(holder.getAdapterPosition());
             }
-        });
+        }); 
+        boolean isExpand = Boolean.valueOf(dataset.get(3));
+        Log.d("AdapterEditRecycler", "isExpand : " + String.valueOf(isExpand));
+        holder.relativeLayoutEdit.setVisibility(isExpand ? View.VISIBLE : View.GONE);
+        holder.btnDown.animate().rotation(isExpand ? 180 : 0).start();
     }
 
     @Override

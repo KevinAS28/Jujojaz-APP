@@ -60,9 +60,6 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         email = findViewById(R.id.emailEText);
         password = findViewById(R.id.passEText);
 
-        signUp = findViewById(R.id.textSignUp);
-        signUp.setOnClickListener(this);
-
         signIn = findViewById(R.id.btnSignIn);
         signIn.setOnClickListener(this);
 

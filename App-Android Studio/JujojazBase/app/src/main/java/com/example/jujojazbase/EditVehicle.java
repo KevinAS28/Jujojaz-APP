@@ -30,7 +30,7 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        String[][] dataset = new String[][] {{"java", "Mulia", "Firmansyah"}, {"java", "World", "Hello"}};
+        String[][] dataset = new String[][] {{"java", "Mulia", "Firmansyah", String.valueOf(false)}, {"java", "World", "Hello", String.valueOf(false)}};
         data = new ArrayList<>();
         data.addAll(Collections.singleton(Arrays.asList(dataset[0])));
         data.addAll(Collections.singleton(Arrays.asList(dataset[1])));
@@ -64,7 +64,7 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
         String userInput =  newText.toLowerCase();
         List<List<String>> newData = new ArrayList<>();
         for (List<String> data : data) {
-            if (data.get(0).toLowerCase().contains(userInput)) {
+            if (data.get(1).toLowerCase().contains(userInput)) {
                 newData.addAll(Collections.singleton(data));
             }
         }
