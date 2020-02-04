@@ -127,11 +127,19 @@ public class AddVehicle extends AppCompatActivity {
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 String picturePath = c.getString(columnIndex);
                 c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+
+                BitmapFactory.Options options = new BitmapFactory.Options();
+
+                // down sizing image as it throws OutOfMemory Exception for larger
+                // images
+                options.inSampleSize = 8;
+
+                final Bitmap thumbnail = BitmapFactory.decodeFile(picturePath, options);
+
                 if (thumbnail==null){
                     System.out.println("THUMBANAIL NULL");
                 }
-                thumbnail=getResizedBitmap(thumbnail, 400);
+//                thumbnail=getResizedBitmap(thumbnail, 400);
                 Log.w("path of image: ", picturePath+"");
 //                IDProf.setImageBitmap(thumbnail);
                 BitMapToString(thumbnail);
@@ -142,7 +150,10 @@ public class AddVehicle extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         userImage1.compress(Bitmap.CompressFormat.PNG, 60, baos);
         byte[] b = baos.toByteArray();
+        System.out.println("FRESH LEN: "+ String.valueOf(b.length));
         Document_img1 = Base64.encodeToString(b, Base64.DEFAULT);
+
+        System.out.println("DECODED LEN: " + String.valueOf(Base64.decode(Document_img1, Base64.DEFAULT).length));
         return Document_img1;
     }
 
@@ -186,7 +197,8 @@ public class AddVehicle extends AppCompatActivity {
         };
         JSONObject dataJson = new JSONObject();
         dataJson.put("image", Document_img1);
-        net.sendUrl("http://10.0.2.2:8080/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
+        System.out.println("JSON LENGTH: " + String.valueOf(dataJson.toString().length()));
+        net.sendUrl("http://192.168.43.171:8080/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
 //        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 //        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
 //                new Response.Listener<String>() {

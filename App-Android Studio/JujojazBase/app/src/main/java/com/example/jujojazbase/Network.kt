@@ -93,7 +93,10 @@ open class Network<ResultType>{
                 System.out.println("url object created")
                 connection.requestMethod = "POST";
 //                var temp = byteArrayOf();
+
                 System.out.println("Data send: " + String(buffer!!.toByteArray()));
+
+
                 connection.outputStream.write(buffer!!.toByteArray())
 //                this.buffer = temp.toList();
                 var result = connection.inputStream.readBytes().toList();

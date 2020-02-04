@@ -16,10 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".AddVehicle" />
+<!--        <activity android:name=".AddVehicle" />-->
         <activity android:name=".EditVehicle"/>
-<!--        <activity android:name=".HomeActivity"/> -->
-        <activity android:name=".HomeActivity">
+        <activity android:name=".AddVehicle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
