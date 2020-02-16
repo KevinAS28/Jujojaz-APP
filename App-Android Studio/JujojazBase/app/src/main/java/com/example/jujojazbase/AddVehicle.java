@@ -1,8 +1,10 @@
 package com.example.jujojazbase;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,7 +46,38 @@ public class AddVehicle extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
         toolbar = findViewById(R.id.toolBarAdd);
-//        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        IDProf = findViewById(R.id.imagePict);
+
+        if (ContextCompat.checkSelfPermission(AddVehicle.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AddVehicle.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(AddVehicle.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        1);
+            }
+        }
+
+        if (ContextCompat.checkSelfPermission(AddVehicle.this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            if (ActivityCompat.shouldShowRequestPermissionRationale(AddVehicle.this,
+                    Manifest.permission.CAMERA)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(AddVehicle.this,
+                        new String[]{Manifest.permission.CAMERA},
+                        2);
+            }
+        }
     }
 
     @Override
@@ -61,7 +97,8 @@ public class AddVehicle extends AppCompatActivity {
                 {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(AddVehicle.this, getPackageName() + ".provider", f));
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     startActivityForResult(intent, 1);
                 }
                 else if (options[item].equals("Choose from Gallery"))
@@ -102,20 +139,6 @@ public class AddVehicle extends AppCompatActivity {
                             + File.separator
                             + "Phoenix" + File.separator + "default";
                     f.delete();
-                    OutputStream outFile = null;
-                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                    try {
-                        outFile = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
-                        outFile.flush();
-                        outFile.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -132,28 +155,28 @@ public class AddVehicle extends AppCompatActivity {
 
                 // down sizing image as it throws OutOfMemory Exception for larger
                 // images
-                options.inSampleSize = 8;
+                //options.inSampleSize = 8;
 
-                final Bitmap thumbnail = BitmapFactory.decodeFile(picturePath, options);
+                Bitmap thumbnail = BitmapFactory.decodeFile(picturePath, options);
 
                 if (thumbnail==null){
                     System.out.println("THUMBANAIL NULL");
                 }
-//                thumbnail=getResizedBitmap(thumbnail, 400);
+                thumbnail=getResizedBitmap(thumbnail, 400);
                 Log.w("path of image: ", picturePath+"");
-//                IDProf.setImageBitmap(thumbnail);
+                IDProf.setImageBitmap(thumbnail);
+                Log.d("AddVehicle", "Galery");
                 BitMapToString(thumbnail);
             }
         }
     }
     public String BitMapToString(Bitmap userImage1) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        userImage1.compress(Bitmap.CompressFormat.PNG, 60, baos);
+        userImage1.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
-        System.out.println("FRESH LEN: "+ String.valueOf(b.length));
-        Document_img1 = Base64.encodeToString(b, Base64.DEFAULT);
-
-        System.out.println("DECODED LEN: " + String.valueOf(Base64.decode(Document_img1, Base64.DEFAULT).length));
+        Log.d("LEN", String.valueOf(b.length));
+        Document_img1 = Base64.encodeToString(b, Base64.NO_WRAP);
+        Log.d("AddVehicle", Document_img1);
         return Document_img1;
     }
 
@@ -198,7 +221,9 @@ public class AddVehicle extends AppCompatActivity {
         JSONObject dataJson = new JSONObject();
         dataJson.put("image", Document_img1);
         System.out.println("JSON LENGTH: " + String.valueOf(dataJson.toString().length()));
-        net.sendUrl("http://192.168.43.171:8080/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
+        net.sendUrl("http://192.168.43.129:8000/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
+        Log.d("AddVehicle", dataJson.toString());
+        Log.d("AddVehicle", String.valueOf(Document_img1.length()));
 //        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 //        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
 //                new Response.Listener<String>() {

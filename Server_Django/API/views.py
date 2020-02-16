@@ -16,12 +16,13 @@ import os
 def test(request):
     data = json.loads(request.POST['data'])
     image = data['image']
-    print(image)
-    with open(os.path.join(settings.BASE_DIR, 'image.jpg'), 'wb+') as writer:
-        b64_string = image
-        print(len(b64_string))
+    with open(os.path.join(settings.BASE_DIR, 'image.jpg'), 'wb') as writer:
+        b64_string = image.replace(" ", "+")
+        print(b64_string)
+        b64_byte = base64.decodebytes(b64_string.encode())
+        print(len(b64_byte))
         #b64_string += "=" * ((4 - len(b64_string) % 4) % 4) #ugh
-        writer.write(base64.b64decode(b64_string.encode("utf-8")))
+        writer.write(b64_byte)
     return HttpResponse('')
 
 @jujojaz_login
