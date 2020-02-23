@@ -26,6 +26,7 @@ def test(request):
     return HttpResponse('')
 
 def create_account(request):
+    #print(request.POST)
     data = json.loads(request.POST['data'])
     username = data['username']
     password = data['password']
