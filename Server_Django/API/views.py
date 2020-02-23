@@ -33,12 +33,13 @@ def create_account(request):
     try:
         user = User.objects.get(username=json.loads(request.POST['data'])['username'])
         #username already exist
-        return HttpResponseBadRequest()
+        print("user {} already exist".format(username))
+        return JsonResponse({'success': '0'})
     except:
         print("user {} not found! creating it... done".format(username))
         User(username=username, password=password).save()
     
-    return HttpResponse()
+    return JsonResponse({'success': '1'})
     
 
 @jujojaz_login
@@ -48,7 +49,8 @@ def get_all_vehicle(request):
     
     kendaraan = list(Vehicle.objects.filter(user=user))
     kendaraan_json = json.loads(serializers.serialize('json', kendaraan))
-    data = {"success": "true", "data": kendaraan_json}        
+    data = {"success": "true", "data": kendaraan_json}      
+    print(f'get all ${user.username}\'s vehicles succeed')  
     return JsonResponse(data)
 
 @jujojaz_login
@@ -81,7 +83,8 @@ def edit_vehicle(request):
     kendaraan.servis_setiap_berapa_hari = int(request.POST["servis_setiap_berapa_hari"])
     kendaraan.servis_dimulai = request.POST["servis_dimulai"]        
     kendaraan.save()
-    return HttpResponse('')
+    print(f'edit ${user.username}\'s vehicle succeed')  
+    return JsonResponse({'success': '1'})
 
 @jujojaz_login
 def add_vehicle(request):
@@ -110,13 +113,15 @@ def add_vehicle(request):
     servis_dimulai = request.POST["servis_dimulai"]       
     foto_foto = str(user.id)+'_'+str(Vehicle.objects.filter(user=user).order_by('id')[:1][0])
     Vehicle(user=user, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
-
-    return HttpResponse('')
+    print(f'add ${user.username}\'s vehicles succeed')  
+    return JsonResponse({'success': '1'})
 
 @jujojaz_login
 def delete_vehicle(request):
+    user = User.objects.get(username=request.POST['username'])
     id_kendaraan = request.POST["id_kendaraan"]
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     kendaraan.delete()
-    return HttpResponse('')
+    print(f'remove ${user.username}\'s vehicles succeed')  
+    return JsonResponse({'success': '1'})
 
