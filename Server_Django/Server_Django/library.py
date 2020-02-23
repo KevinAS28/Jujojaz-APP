@@ -1,5 +1,5 @@
 from Crypto.Cipher import AES
-from django.http import HttpResponseNotAllowed, HttpResponseForbidden
+from django.http import JsonResponse
 from django.db import models
 from API.models import *
 from django.http import request as Request
@@ -48,12 +48,13 @@ def jujojaz_login(f):
             user = list(User.objects.filter(username=datas["username"], password=datas["password"]))
             if (len(user)==0):
                 print('Authentication Failed')
-                return HttpResponseForbidden()    
+                #return HttpResponseForbidden()    
+                return JsonResponse({'succees': '0', 'msg': 'Invalid username or password'})
             else:
                 return f(*args, **kw)
         else:
             print('Invalid Request')
-            return HttpResponseForbidden()
+            return JsonResponse({'succees': '0', 'msg': 'Error'})
     return wrapper
 
     
