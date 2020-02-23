@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from Server_Django.library import jujojaz_login
 from .models import *
-from django.http.response import HttpResponseNotAllowed, JsonResponse
+from django.http.response import HttpResponseNotAllowed, JsonResponse, HttpResponseNotAllowed
 from django.core import serializers
 from django.http import HttpResponse
 from django.forms import ModelForm
@@ -30,6 +30,11 @@ def create_account(request):
     data = json.loads(request.POST['data'])
     username = data['username']
     password = data['password']
+    try:
+        user = User.objects.get(username=json.loads(request.POST['data'])['username'])
+        return HttpResponseNotAllowed()
+    except:
+        pass
     User(username=username, password=password).save()
     return HttpResponse()
 
