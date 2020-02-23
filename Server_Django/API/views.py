@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from Server_Django.library import jujojaz_login
 from .models import *
-from django.http.response import HttpResponseNotAllowed, JsonResponse, HttpResponseNotAllowed
+from django.http.response import HttpResponseNotAllowed, JsonResponse, HttpResponseBadRequest
 from django.core import serializers
 from django.http import HttpResponse
 from django.forms import ModelForm
@@ -32,11 +32,14 @@ def create_account(request):
     password = data['password']
     try:
         user = User.objects.get(username=json.loads(request.POST['data'])['username'])
-        return HttpResponseNotAllowed()
+        #username already exist
+        return HttpResponseBadRequest()
     except:
-        pass
-    User(username=username, password=password).save()
+        print("user {} not found! creating it... done".format(username))
+        User(username=username, password=password).save()
+    
     return HttpResponse()
+    
 
 @jujojaz_login
 def get_all_vehicle(request):
