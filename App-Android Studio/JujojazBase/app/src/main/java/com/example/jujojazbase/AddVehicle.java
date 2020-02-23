@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -29,6 +30,8 @@ import android.view.Menu;
 import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import json.JSONObject;
 
 import java.io.*;
@@ -36,28 +39,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddVehicle extends AppCompatActivity {
-    Toolbar toolbar;
+public class AddVehicle extends AppCompatActivity implements View.OnClickListener {
     private String Document_img1="";
-    ImageView IDProf;
+    private ImageView IDProf;
+    private ImageButton addPicture, addPhoto;
+    private FloatingActionButton fabAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
-        toolbar = findViewById(R.id.toolBarAdd);
-        setSupportActionBar(toolbar);
         IDProf = findViewById(R.id.imagePict);
+        addPicture = findViewById(R.id.addPicture);
+        addPicture.setOnClickListener(this);
+        addPhoto = findViewById(R.id.addPhoto);
+        addPhoto.setOnClickListener(this);
+        fabAdd = findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(this);
 
         if (ContextCompat.checkSelfPermission(AddVehicle.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
             if (ActivityCompat.shouldShowRequestPermissionRationale(AddVehicle.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
-                // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(AddVehicle.this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         1);
@@ -65,14 +68,9 @@ public class AddVehicle extends AppCompatActivity {
         }
 
         if (ContextCompat.checkSelfPermission(AddVehicle.this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
             if (ActivityCompat.shouldShowRequestPermissionRationale(AddVehicle.this,
                     Manifest.permission.CAMERA)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
-                // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(AddVehicle.this,
                         new String[]{Manifest.permission.CAMERA},
                         2);
@@ -84,35 +82,6 @@ public class AddVehicle extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
-    }
-
-    private void selectImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Add Photo!");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo"))
-                {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(AddVehicle.this, getPackageName() + ".provider", f));
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivityForResult(intent, 1);
-                }
-                else if (options[item].equals("Choose from Gallery"))
-                {
-                    Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, 2);
-                }
-                else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-
     }
 
     @Override
@@ -221,9 +190,7 @@ public class AddVehicle extends AppCompatActivity {
         JSONObject dataJson = new JSONObject();
         dataJson.put("image", Document_img1);
         System.out.println("JSON LENGTH: " + String.valueOf(dataJson.toString().length()));
-        net.sendUrl("http://192.168.43.129:8000/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
-        Log.d("AddVehicle", dataJson.toString());
-        Log.d("AddVehicle", String.valueOf(Document_img1.length()));
+        net.sendUrl("http://192.168.225.189:8000/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
 //        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 //        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
 //                new Response.Listener<String>() {
@@ -352,13 +319,24 @@ public class AddVehicle extends AppCompatActivity {
 //        requestQueue.add(stringRequest);
     }
 
-    public void actionButtonClicked(View view){
-        String jenis_kendaraan = "Sport";
-        if (Document_img1.equals("") || Document_img1.equals(null)) {
-            selectImage();
-        }
-        else{
-            sendDetail();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.addPicture :
+                Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+                picture.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(AddVehicle.this, getPackageName() + ".provider", f));
+                picture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(picture, 1);
+                break;
+
+            case R.id.addPhoto :
+                Intent photo = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(photo, 2);
+                break;
+
+            case R.id.fabAdd :
+                sendDetail();
 //            if (AppStatus.getInstance(this).isOnline()) {
 //                SendDetail();
 //
@@ -370,7 +348,7 @@ public class AddVehicle extends AppCompatActivity {
 //                Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
 //                Log.v("Home", "############################You are not online!!!!");
 //            }
-
+                break;
         }
     }
 }

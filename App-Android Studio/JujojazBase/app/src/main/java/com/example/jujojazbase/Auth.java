@@ -3,6 +3,7 @@ package com.example.jujojazbase;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +18,6 @@ import java.util.List;
 
 public class Auth extends AppCompatActivity implements View.OnClickListener {
     EditText email, password;
-    TextView signUp;
     Button signIn;
     Intent intent;
 
@@ -102,7 +102,9 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         JSONObject authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
-        net.sendUrl("http://10.0.2.2:8080/api/allvehicles/", Lib.Companion.byteToByte(("data="+authJson.toString()).getBytes()) , 0);
+        Log.d("AddVehicle", authJson.toString());
+        AsyncTask<String, String, List<Byte>> response = net.sendUrl("http://192.168.43.129:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
+        Log.d("Auth", response.toString());
 
         return authJson;
     }

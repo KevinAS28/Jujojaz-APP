@@ -6,9 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +21,7 @@ import java.util.List;
 
 public class EditVehicle extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private Toolbar toolbar;
+    private FloatingActionButton fabEdit;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -29,6 +34,15 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
 
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
+
+        fabEdit = findViewById(R.id.fabEdit);
+        fabEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
+                startActivity(intent);
+            }
+        });
 
         String[][] dataset = new String[][] {{"java", "Mulia", "Firmansyah", String.valueOf(false)}, {"java", "World", "Hello", String.valueOf(false)}};
         data = new ArrayList<>();

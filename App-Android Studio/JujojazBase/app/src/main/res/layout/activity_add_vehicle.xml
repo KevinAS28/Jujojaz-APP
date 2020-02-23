@@ -127,13 +127,17 @@
                     android:id="@+id/addPicture"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginEnd="20dp" />
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    app:srcCompat="@drawable/ic_add_image_from_camera"/>
 
                 <ImageButton
                     android:id="@+id/addPhoto"
                     android:layout_width="40dp"
-                    android:layout_height="40dp" />
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/ic_add_image_from_gallery"/>
 
             </LinearLayout>
 
@@ -157,7 +161,6 @@
         android:backgroundTint="#34eb67"
         app:srcCompat="@drawable/ic_send"
         android:layout_alignParentEnd="true"
-        android:onClick="actionButtonClicked"
     />
 
 </RelativeLayout>

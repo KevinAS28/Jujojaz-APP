@@ -9,6 +9,6 @@
             android:id="@+id/loading_content"
             android:background="#fff"
             android:gravity="center">
-        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@drawable/jujojaz_logo"/>
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" app:srcCompat="@mipmap/jujojaz_logo"/>
 
     </RelativeLayout>

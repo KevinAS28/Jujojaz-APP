@@ -80,8 +80,7 @@
             android:text="@string/SignIn"
             android:textAllCaps="false"
             android:textStyle="bold"
-            android:onClick="onClick"
-        />
+            android:onClick="onClick" />
 
         <TextView
             android:id="@+id/textForgotPass"
