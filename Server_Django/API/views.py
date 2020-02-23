@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from Server_Django.library import jujojaz_login
 from .models import *
-from django.http.response import HttpResponseNotAllowed, JsonResponse, HttpResponseBadRequest
+from django.http.response import JsonResponse
 from django.core import serializers
 from django.http import HttpResponse
 from django.forms import ModelForm
@@ -23,7 +23,8 @@ def test(request):
         print(len(b64_byte))
         #b64_string += "=" * ((4 - len(b64_string) % 4) % 4) #ugh
         writer.write(b64_byte)
-    return HttpResponse('')
+    #return HttpResponse('test')
+    return JsonResponse({"success": '1'})
 
 def create_account(request):
     #print(request.POST)
@@ -34,7 +35,7 @@ def create_account(request):
         user = User.objects.get(username=json.loads(request.POST['data'])['username'])
         #username already exist
         print("user {} already exist".format(username))
-        return JsonResponse({'success': '0'})
+        return JsonResponse({'success': '0', 'msg': 'user already exist'})
     except:
         print("user {} not found! creating it... done".format(username))
         User(username=username, password=password).save()
