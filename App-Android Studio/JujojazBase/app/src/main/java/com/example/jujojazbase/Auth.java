@@ -14,6 +14,7 @@ import json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class Auth extends AppCompatActivity implements View.OnClickListener {
@@ -102,10 +103,8 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         JSONObject authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
-        Log.d("AddVehicle", authJson.toString());
-        AsyncTask<String, String, List<Byte>> response = net.sendUrl("http://192.168.43.129:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
-        Log.d("Auth", response.toString());
-
+        Log.d("Auth", authJson.toString()) ;
+        net.sendUrl("http://192.168.43.129:8000/api/createaccount/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
         return authJson;
     }
 
