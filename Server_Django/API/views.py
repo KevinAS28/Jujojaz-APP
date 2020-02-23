@@ -25,6 +25,13 @@ def test(request):
         writer.write(b64_byte)
     return HttpResponse('')
 
+def create_account(request):
+    data = json.loads(request.POST['data'])
+    username = data['username']
+    password = data['password']
+    User(username=username, password=password).save()
+    return HttpResponse()
+
 @jujojaz_login
 def get_all_vehicle(request):
     user = User.objects.get(username=json.loads(request.POST['data'])['username'])
@@ -102,3 +109,4 @@ def delete_vehicle(request):
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     kendaraan.delete()
     return HttpResponse('')
+
