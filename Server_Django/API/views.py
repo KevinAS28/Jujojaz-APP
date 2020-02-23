@@ -27,6 +27,7 @@ def test(request):
 
 @jujojaz_login
 def get_all_vehicle(request):
+    print(type(request.POST['data']))
     user = User.objects.get(username=json.loads(request.POST['data'])['username'])
     
     kendaraan = list(Vehicle.objects.filter(user=user))

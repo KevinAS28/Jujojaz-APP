@@ -26,7 +26,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    private FloatingActionButton fabHome;
+    //private FloatingActionButton fabHome;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -42,17 +42,17 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         toolbar = findViewById(R.id.homeToolBar);
         setSupportActionBar(toolbar);
 
-        fabHome = findViewById(R.id.fabHome);
-        fabHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Home", v.toString());
-                Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
-                startActivity(intent);
-            }
-        });
+        //fabHome = findViewById(R.id.fabHome);
+        //fabHome.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //   public void onClick(View v) {
+        //        Log.d("Home", v.toString());
+        //        Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
+        //        startActivity(intent);
+        //    }
+        //});
 
-        String[][] dataset = new String[][] {{"java", "Mulia", "Firmansyah"}, {"java", "World", "Hello"}};
+        String[][] dataset = new String[][] {{"image", "Motor", "Kendaraan Roda 2"}, {"image", "Mobil", "Kendaraan Roda 4"}};
         data = new ArrayList<>();
         data.addAll(Collections.singleton(Arrays.asList(dataset[0])));
         data.addAll(Collections.singleton(Arrays.asList(dataset[1])));

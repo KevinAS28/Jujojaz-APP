@@ -21,7 +21,7 @@ public class EditInformation extends AppCompatActivity {
         textMerk = findViewById(R.id.textMerk);
         textKuitansi = findViewById(R.id.textKuitansi);
         textPajak = findViewById(R.id.textPajak);
-        textServis = findViewById(R.id.textPajak);
+        textServis = findViewById(R.id.textServis);
 
         addPicture = findViewById(R.id.addPicture);
         addPhoto = findViewById(R.id.addPhoto);
