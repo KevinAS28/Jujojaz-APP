@@ -56,10 +56,11 @@ def get_all_vehicle(request):
 
 @jujojaz_login
 def edit_vehicle(request):
-    id_kendaraan = request.POST["id_kendaraan"]
+    data = json.loads(request.POST['data'])
+    id_kendaraan = data["id_kendaraan"]
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     
-    merk_nama = request.POST["merk"]
+    merk_nama = data["merk"]
     merks = list(VehicleMerk.objects.filter(name=merk_nama))
     if (len(merks)):
         merk_object = merks[0]    
@@ -67,7 +68,7 @@ def edit_vehicle(request):
         merk_object = VehicleMerk(name=merk_nama)
         merk_object.save()
 
-    type_nama = request.POST["tipe"]
+    type_nama = data["tipe"]
     types = list(Vehicletype.objects.filter(name=type_nama))
     if (len(types)):
         type_object = types[0]    
@@ -75,22 +76,24 @@ def edit_vehicle(request):
         type_object = VehicleType(name=type_nama)
         type_object.save()
     
-    user = User.objects.get(username=request.POST['username'])
+    user = User.objects.get(username=data['username'])
 
     kendaraan.tipe = type_object
     kendaraan.merk = merk_object
-    kendaraan.pajak_setiap_berapa_hari = int(request.POST["pajak_setiap_berapa_hari"])
-    kendaraan.pajak_dimulai = request.POST["pajak_dimulai"]
-    kendaraan.servis_setiap_berapa_hari = int(request.POST["servis_setiap_berapa_hari"])
-    kendaraan.servis_dimulai = request.POST["servis_dimulai"]        
+    kendaraan.pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
+    kendaraan.pajak_dimulai = data["pajak_dimulai"]
+    kendaraan.servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
+    kendaraan.servis_dimulai = data["servis_dimulai"]        
     kendaraan.save()
     print(f'edit ${user.username}\'s vehicle succeed')  
     return JsonResponse({'success': '1'})
 
 @jujojaz_login
 def add_vehicle(request):
-    user = User.objects.get(username=request.POST['username'])
-    merk_nama = request.POST["merk"]
+    data = json.loads(request.POST['data'])
+    user = User.objects.get(username=data['username'])
+    data = json.loads(data['data'])
+    merk_nama = data["merk"]
     merks = list(VehicleMerk.objects.filter(name=merk_nama))
     if (len(merks)):
         merk_object = merks[0]    
@@ -98,7 +101,7 @@ def add_vehicle(request):
         merk_object = VehicleMerk(name=merk_nama)
         merk_object.save()
 
-    type_nama = request.POST["tipe"]
+    type_nama = data["tipe"]
     types = list(VehicleType.objects.filter(name=type_nama))
     if (len(types)):
         type_object = types[0]    
@@ -108,10 +111,10 @@ def add_vehicle(request):
 
     tipe = type_object
     merk = merk_object
-    pajak_setiap_berapa_hari = int(request.POST["pajak_setiap_berapa_hari"])
-    pajak_dimulai = request.POST["pajak_dimulai"]
-    servis_setiap_berapa_hari = int(request.POST["servis_setiap_berapa_hari"])
-    servis_dimulai = request.POST["servis_dimulai"]       
+    pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
+    pajak_dimulai = data["pajak_dimulai"]
+    servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
+    servis_dimulai = data["servis_dimulai"]       
     foto_foto = str(user.id)+'_'+str(Vehicle.objects.filter(user=user).order_by('id')[:1][0])
     Vehicle(user=user, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
     print(f'add ${user.username}\'s vehicles succeed')  
@@ -119,8 +122,9 @@ def add_vehicle(request):
 
 @jujojaz_login
 def delete_vehicle(request):
-    user = User.objects.get(username=request.POST['username'])
-    id_kendaraan = request.POST["id_kendaraan"]
+    data = json.loads(request.POST['data'])
+    user = User.objects.get(username=data['username'])
+    id_kendaraan = data["id_kendaraan"]
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     kendaraan.delete()
     print(f'remove ${user.username}\'s vehicles succeed')  
