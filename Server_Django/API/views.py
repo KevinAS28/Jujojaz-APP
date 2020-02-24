@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from Server_Django.library import jujojaz_login
 from .models import *
-from django.http.response import HttpResponseNotAllowed, JsonResponse, HttpResponseBadRequest
+from django.http.response import JsonResponse
 from django.core import serializers
 from django.http import HttpResponse
 from django.forms import ModelForm
@@ -23,7 +23,8 @@ def test(request):
         print(len(b64_byte))
         #b64_string += "=" * ((4 - len(b64_string) % 4) % 4) #ugh
         writer.write(b64_byte)
-    return HttpResponse('')
+    #return HttpResponse('test')
+    return JsonResponse({"success": '1'})
 
 def create_account(request):
     #print(request.POST)
@@ -33,11 +34,14 @@ def create_account(request):
     try:
         user = User.objects.get(username=json.loads(request.POST['data'])['username'])
         #username already exist
-        return HttpResponseBadRequest()
+        print("user {} already exist".format(username))
+        return JsonResponse({'success': '0', 'msg': 'user already exist'})
     except:
         print("user {} not found! creating it... done".format(username))
         User(username=username, password=password).save()
-    return HttpResponse()
+    
+    return JsonResponse({'success': '1'})
+    
 
 @jujojaz_login
 def get_all_vehicle(request):
@@ -46,15 +50,17 @@ def get_all_vehicle(request):
     
     kendaraan = list(Vehicle.objects.filter(user=user))
     kendaraan_json = json.loads(serializers.serialize('json', kendaraan))
-    data = {"success": "true", "data": kendaraan_json}        
+    data = {"success": "true", "data": kendaraan_json}      
+    print(f'get all ${user.username}\'s vehicles succeed')  
     return JsonResponse(data)
 
 @jujojaz_login
 def edit_vehicle(request):
-    id_kendaraan = request.POST["id_kendaraan"]
+    data = json.loads(request.POST['data'])
+    id_kendaraan = data["id_kendaraan"]
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     
-    merk_nama = request.POST["merk"]
+    merk_nama = data["merk"]
     merks = list(VehicleMerk.objects.filter(name=merk_nama))
     if (len(merks)):
         merk_object = merks[0]    
@@ -62,7 +68,7 @@ def edit_vehicle(request):
         merk_object = VehicleMerk(name=merk_nama)
         merk_object.save()
 
-    type_nama = request.POST["tipe"]
+    type_nama = data["tipe"]
     types = list(Vehicletype.objects.filter(name=type_nama))
     if (len(types)):
         type_object = types[0]    
@@ -70,21 +76,24 @@ def edit_vehicle(request):
         type_object = VehicleType(name=type_nama)
         type_object.save()
     
-    user = User.objects.get(username=request.POST['username'])
+    user = User.objects.get(username=data['username'])
 
     kendaraan.tipe = type_object
     kendaraan.merk = merk_object
-    kendaraan.pajak_setiap_berapa_hari = int(request.POST["pajak_setiap_berapa_hari"])
-    kendaraan.pajak_dimulai = request.POST["pajak_dimulai"]
-    kendaraan.servis_setiap_berapa_hari = int(request.POST["servis_setiap_berapa_hari"])
-    kendaraan.servis_dimulai = request.POST["servis_dimulai"]        
+    kendaraan.pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
+    kendaraan.pajak_dimulai = data["pajak_dimulai"]
+    kendaraan.servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
+    kendaraan.servis_dimulai = data["servis_dimulai"]        
     kendaraan.save()
-    return HttpResponse('')
+    print(f'edit ${user.username}\'s vehicle succeed')  
+    return JsonResponse({'success': '1'})
 
 @jujojaz_login
 def add_vehicle(request):
-    user = User.objects.get(username=request.POST['username'])
-    merk_nama = request.POST["merk"]
+    data = json.loads(request.POST['data'])
+    user = User.objects.get(username=data['username'])
+    data = json.loads(data['data'])
+    merk_nama = data["merk"]
     merks = list(VehicleMerk.objects.filter(name=merk_nama))
     if (len(merks)):
         merk_object = merks[0]    
@@ -92,7 +101,7 @@ def add_vehicle(request):
         merk_object = VehicleMerk(name=merk_nama)
         merk_object.save()
 
-    type_nama = request.POST["tipe"]
+    type_nama = data["tipe"]
     types = list(VehicleType.objects.filter(name=type_nama))
     if (len(types)):
         type_object = types[0]    
@@ -102,19 +111,22 @@ def add_vehicle(request):
 
     tipe = type_object
     merk = merk_object
-    pajak_setiap_berapa_hari = int(request.POST["pajak_setiap_berapa_hari"])
-    pajak_dimulai = request.POST["pajak_dimulai"]
-    servis_setiap_berapa_hari = int(request.POST["servis_setiap_berapa_hari"])
-    servis_dimulai = request.POST["servis_dimulai"]       
+    pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
+    pajak_dimulai = data["pajak_dimulai"]
+    servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
+    servis_dimulai = data["servis_dimulai"]       
     foto_foto = str(user.id)+'_'+str(Vehicle.objects.filter(user=user).order_by('id')[:1][0])
     Vehicle(user=user, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
-
-    return HttpResponse('')
+    print(f'add ${user.username}\'s vehicles succeed')  
+    return JsonResponse({'success': '1'})
 
 @jujojaz_login
 def delete_vehicle(request):
-    id_kendaraan = request.POST["id_kendaraan"]
+    data = json.loads(request.POST['data'])
+    user = User.objects.get(username=data['username'])
+    id_kendaraan = data["id_kendaraan"]
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     kendaraan.delete()
-    return HttpResponse('')
+    print(f'remove ${user.username}\'s vehicles succeed')  
+    return JsonResponse({'success': '1'})
 
