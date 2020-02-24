@@ -49,12 +49,12 @@ def jujojaz_login(f):
             if (len(user)==0):
                 print('Authentication Failed')
                 #return HttpResponseForbidden()    
-                return JsonResponse({'succees': '0', 'msg': 'Invalid username or password'})
+                return JsonResponse({'success': '0', 'msg': 'Invalid username or password'})
             else:
                 return f(*args, **kw)
         else:
             print('Invalid Request')
-            return JsonResponse({'succees': '0', 'msg': 'Error'})
+            return JsonResponse({'success': '0', 'msg': 'Error'})
     return wrapper
 
     

@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -41,6 +42,14 @@ import java.util.Map;
 
 public class AddVehicle extends AppCompatActivity implements View.OnClickListener {
     private String Document_img1="";
+    private String textFrom;
+    private String textCarName;
+    private String textTipe;
+    private String textMerk;
+    private String textPajakHari;
+    private String textPajakMulai;
+    private String textServisHari;
+    private String textServisMulai;
     private ImageView IDProf;
     private ImageButton addPicture, addPhoto;
     private FloatingActionButton fabAdd;
@@ -49,6 +58,16 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
+
+        textFrom = ((EditText) findViewById(R.id.textFrom)).getText().toString();
+        textCarName = ((EditText) findViewById(R.id.textCarName)).getText().toString();
+        textTipe = ((EditText) findViewById(R.id.textTipe)).getText().toString();
+        textMerk = ((EditText) findViewById(R.id.textMerk)).getText().toString();
+        textPajakHari = ((EditText) findViewById(R.id.textPajakHari)).getText().toString();
+        textPajakMulai = ((EditText) findViewById(R.id.textPajakMulai)).getText().toString();
+        textServisHari = ((EditText) findViewById(R.id.textServisHari)).getText().toString();
+        textServisMulai = ((EditText) findViewById(R.id.textServisMulai)).getText().toString();
+
         IDProf = findViewById(R.id.imagePict);
         addPicture = findViewById(R.id.addPicture);
         addPicture.setOnClickListener(this);
@@ -177,20 +196,22 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
 
             }
 
-
-
-
-
             @Override
             public void onError(String msg){
                 loading.dismiss();
                 System.out.println("ERROR: " + msg);
             }
         };
+
         JSONObject dataJson = new JSONObject();
+        dataJson.put("tipe", textTipe);
+        dataJson.put("merk", textMerk);
+        dataJson.put("pajak_setiap_berapa_hari", textPajakHari);
+        dataJson.put("pajak_dimulai", textPajakMulai);
+        dataJson.put("servis_setiap_berapa_hari", textServisHari);
+        dataJson.put("servis_dimulai", textServisMulai);
         dataJson.put("image", Document_img1);
-        System.out.println("JSON LENGTH: " + String.valueOf(dataJson.toString().length()));
-        net.sendUrl("http://192.168.225.189:8000/api/test/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()) , 0);
+        net.sendUrl("http://192.168.225.189:8000/api/addvehicle", Lib.Companion.byteToByte((dataJson.toString()).getBytes()), 0);
 //        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
 //        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
 //                new Response.Listener<String>() {
@@ -331,7 +352,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                 break;
 
             case R.id.addPhoto :
-                Intent photo = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent photo = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(photo, 2);
                 break;
 
