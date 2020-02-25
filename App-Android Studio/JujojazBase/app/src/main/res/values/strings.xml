@@ -31,7 +31,9 @@
     <string name="imagePictText">Picture</string>
     <string name="titleAbout">about</string>
     <string name="textMerk">\tMerk</string>
-    <string name="textKuitansi">\tKuitansi Servis</string>
-    <string name="textPajak">\tTmt. Pajak</string>
-    <string name="textServis">\tTmt. Servis</string>
+    <string name="hintTipe">\tTipe</string>
+    <string name="hintPajakHari">\tPajak Setiap Berapa Hari</string>
+    <string name="hintPajakDimulai">\tPajak Dimulai</string>
+    <string name="servis_setiap_berapa_hari">\tServis Setiap Berapa Hari</string>
+    <string name="servis_dimulai">\tServis Dimulai</string>
 </resources>

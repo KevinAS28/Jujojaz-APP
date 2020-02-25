@@ -1,10 +1,12 @@
 package com.example.jujojazbase;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +16,15 @@ import json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class Auth extends AppCompatActivity implements View.OnClickListener {
-    EditText email, password;
-    Button signIn;
-    Intent intent;
+    private EditText email, password;
+    private Button signIn;
+    private Intent intent;
+    private final static String LOGIN = "login";
+    private boolean isLogin = false;
 
     public void loginApiFail(JSONObject data){
 
@@ -38,6 +43,8 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("EMAIL", email.getText().toString().trim());
         startActivity(intent);
+        isLogin = true;
+        finish();
     }
 
     public void loginFail(JSONObject data){
@@ -53,9 +60,16 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_auth);
+
+        if (savedInstanceState != null) {
+            boolean isLogin = savedInstanceState.getBoolean(LOGIN);
+            if (isLogin) {
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
 
         email = findViewById(R.id.emailEText);
         password = findViewById(R.id.passEText);
@@ -102,10 +116,8 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         JSONObject authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
-        Log.d("AddVehicle", authJson.toString());
-        AsyncTask<String, String, List<Byte>> response = net.sendUrl("http://192.168.43.129:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
-        Log.d("Auth", response.toString());
-
+        Log.d("Auth", authJson.toString()) ;
+        net.sendUrl("http://192.168.43.129:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
         return authJson;
     }
 
@@ -119,5 +131,11 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         String username = ((EditText)findViewById(R.id.emailEText)).getText().toString();
         String password = ((EditText)findViewById(R.id.passEText)).getText().toString();
         loginApi(username, password, false);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(LOGIN, isLogin);
     }
 }
