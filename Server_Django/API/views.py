@@ -10,6 +10,7 @@ import json
 import base64
 import Server_Django.settings as settings
 import os
+from Server_Django.settings import *
 # Create your views here.
 
 
@@ -25,6 +26,18 @@ def test(request):
         writer.write(b64_byte)
     #return HttpResponse('test')
     return JsonResponse({"success": '1'})
+
+def write_base64_file(base64_string, full_path):
+    with open(full_path, 'wb') as writer:
+        #b64_string = image.replace(" ", "+")
+        b64_string=b64_string.replace(' ', '+')
+        #print(b64_string)
+        b64_byte = base64.decodebytes(b64_string.encode())
+        #print(len(b64_byte))
+        writer.write(b64_byte)
+    
+    
+
 
 def create_account(request):
     #print(request.POST)
@@ -115,8 +128,12 @@ def add_vehicle(request):
     pajak_dimulai = data["pajak_dimulai"]
     servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
     servis_dimulai = data["servis_dimulai"]       
-    foto_foto = str(user.id)+'_'+str(Vehicle.objects.filter(user=user).order_by('id')[:1][0])
-    Vehicle(user=user, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
+    foto_foto_name = str(user.id)+'_'+str(Vehicle.objects.filter(user=user).order_by('id')[:1][0])
+    Vehicle(user=user, tipe=tipe, merk=merk, foto_foto_name=foto_foto_name, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
+    
+    foto_file = data["photo"]
+    write_base64_file(foto_file, os.path.join(VEHICLE_PHOTOS_DIR, foto_foto_name))
+    
     print(f'add ${user.username}\'s vehicles succeed')  
     return JsonResponse({'success': '1'})
 
