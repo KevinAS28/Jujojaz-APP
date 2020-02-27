@@ -2,6 +2,9 @@ package com.example.jujojazbase;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycler.viewHolder> {
-    public static List<List<String>> data = new ArrayList<>();
+    public static List<ModelHomeActivity> data = new ArrayList<>();
     private Context context;
 
 
@@ -35,7 +38,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
         }
     }
 
-    public AdapterHomeRecycler(Context context, List<List<String>> myData) {
+    public AdapterHomeRecycler(Context context, List<ModelHomeActivity> myData) {
         this.context = context;
         data = myData;
     }
@@ -51,13 +54,14 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
 
     @Override
     public void onBindViewHolder(@NonNull final viewHolder holder, int position) {
-        List<String> dataset = data.get(position);
+        ModelHomeActivity dataset = data.get(position);
         //Glide.with(context)
         //        .load(dataset.get(0))
         //        .apply(RequestOptions.circleCropTransform())
         //        .into(holder.foto);
-        holder.name.setText(dataset.get(1));
-        holder.detail.setText(dataset.get(2));
+        //holder.foto.setImageBitmap(stringToBitmap(dataset.getImage()));
+        holder.name.setText(dataset.getTitle());
+        holder.detail.setText(dataset.getDetail());
         holder.btnMoreThan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +76,17 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public Bitmap stringToBitmap(String encodeString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodeString, Base64.NO_WRAP);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 
 }

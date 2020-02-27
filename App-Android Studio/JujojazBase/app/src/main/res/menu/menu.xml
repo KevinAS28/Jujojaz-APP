@@ -15,4 +15,10 @@
         android:title="@string/menuNotification"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/menuLogOut"
+        android:icon="@drawable/ic_icon_logout"
+        android:title="@string/menuLogout"
+        app:showAsAction="ifRoom"/>
+
 </menu>

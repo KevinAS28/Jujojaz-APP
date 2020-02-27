@@ -81,7 +81,8 @@
                     android:hint="@string/hintPajakHari"
                     android:textColorHint="@android:color/darker_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
 
                 <EditText
                     android:id="@+id/textPajakMulai"
@@ -95,7 +96,8 @@
                     android:hint="@string/servis_setiap_berapa_hari"
                     android:textColorHint="@android:color/darker_gray"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:inputType="number"/>
 
                 <EditText
                     android:id="@+id/textServisMulai"

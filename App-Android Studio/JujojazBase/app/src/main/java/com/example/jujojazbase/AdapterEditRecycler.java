@@ -1,6 +1,9 @@
 package com.example.jujojazbase;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import java.util.List;
 
 public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycler.viewHolder> {
-    public static List<List<String>> data;
+    public static List<ModelEditVehicle> data;
     private Context context;
 
     public static class viewHolder extends RecyclerView.ViewHolder {
@@ -39,7 +39,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
         }
     }
 
-    public AdapterEditRecycler(Context context, List<List<String>> myData) {
+    public AdapterEditRecycler(Context context, List<ModelEditVehicle> myData) {
         this.context = context;
         data = myData;
     }
@@ -55,24 +55,24 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
 
     @Override
     public void onBindViewHolder(@NonNull final AdapterEditRecycler.viewHolder holder, final int position) {
-        List<String> dataset = data.get(position);
+        final ModelEditVehicle dataset = data.get(position);
         //Glide.with(context)
         //        .load(dataset.get(0))
         //        .apply(RequestOptions.circleCropTransform())
         //        .into(holder.foto);
-        holder.name.setText(dataset.get(1));
-        holder.detail.setText(dataset.get(2));
+        //holder.foto.setImageBitmap(stringToBitmap(dataset.getImage()));
+        holder.name.setText(dataset.getTitle());
+        holder.detail.setText(dataset.getDetail());
         holder.btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("AdapterEditRecycler", "btnDown");
-                List<String> datasetBool = data.get(holder.getAdapterPosition());
-                datasetBool.set(3, String.valueOf(!Boolean.valueOf(datasetBool.get(3))));
-                Log.d("AdapterEditRecycler", "dataset : " + datasetBool.toString());
+                dataset.setExpand(!dataset.isExpand());
+                Log.d("AdapterEditRecycler", "dataset : " + dataset.isExpand());
                 notifyItemChanged(holder.getAdapterPosition());
             }
         }); 
-        boolean isExpand = Boolean.valueOf(dataset.get(3));
+        boolean isExpand = dataset.isExpand();
         Log.d("AdapterEditRecycler", "isExpand : " + String.valueOf(isExpand));
         holder.relativeLayoutEdit.setVisibility(isExpand ? View.VISIBLE : View.GONE);
         holder.btnDown.animate().rotation(isExpand ? 180 : 0).start();
@@ -81,5 +81,16 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public Bitmap stringToBitmap(String encodeString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodeString, Base64.NO_WRAP);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 }

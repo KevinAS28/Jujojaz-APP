@@ -40,10 +40,10 @@ def allDatasMethods(request):
 def jujojaz_login(f):
     def wrapper(*args, **kw):
         request = args[0]
+        print(request)
         datas = allDatasMethods(request)
         datas = eval(datas["data"])
-        print(type(datas))
-
+        print(datas)
         if ( ("username" in datas) and ("password" in datas)):
             user = list(User.objects.filter(username=datas["username"], password=datas["password"]))
             if (len(user)==0):

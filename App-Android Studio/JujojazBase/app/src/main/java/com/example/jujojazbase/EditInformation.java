@@ -15,7 +15,6 @@ public class EditInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
 
-
         addPicture = findViewById(R.id.addPicture);
         addPhoto = findViewById(R.id.addPhoto);
     }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -25,7 +26,9 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<List<String>> data;
+    private List<ModelEditVehicle> data;
+    private ImageButton btnEdit, btnDelete;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +47,9 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
             }
         });
 
-        String[][] dataset = new String[][] {{"java", "Mulia", "Firmansyah", String.valueOf(false)}, {"java", "World", "Hello", String.valueOf(false)}};
         data = new ArrayList<>();
-        data.addAll(Collections.singleton(Arrays.asList(dataset[0])));
-        data.addAll(Collections.singleton(Arrays.asList(dataset[1])));
+        data.add(new ModelEditVehicle("image", "Hello", "World"));
+        data.add(new ModelEditVehicle("image", "Welcome", "Back"));
 
         recyclerView = findViewById(R.id.recyclerViewEdit);
         recyclerView.setHasFixedSize(true);
@@ -58,6 +60,7 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
         adapter = new AdapterEditRecycler(this, data);
         recyclerView.setAdapter(adapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,9 +79,9 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
     @Override
     public boolean onQueryTextChange(String newText) {
         String userInput =  newText.toLowerCase();
-        List<List<String>> newData = new ArrayList<>();
-        for (List<String> data : data) {
-            if (data.get(1).toLowerCase().contains(userInput)) {
+        List<ModelEditVehicle> newData = new ArrayList<>();
+        for (ModelEditVehicle data : data) {
+            if (data.getTitle().toLowerCase().contains(userInput)) {
                 newData.addAll(Collections.singleton(data));
             }
         }
@@ -88,5 +91,4 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
         adapter.notifyDataSetChanged();
         return true;
     }
-
 }

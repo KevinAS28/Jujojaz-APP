@@ -2,7 +2,6 @@ package com.example.jujojazbase;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,31 +16,23 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.os.Bundle;
 import android.view.Menu;
-import com.android.volley.*;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import json.JSONObject;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AddVehicle extends AppCompatActivity implements View.OnClickListener {
     private String Document_img1="";
+/*
     private String textFrom;
     private String textCarName;
     private String textTipe;
@@ -50,6 +41,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
     private String textPajakMulai;
     private String textServisHari;
     private String textServisMulai;
+ */
     private ImageView IDProf;
     private ImageButton addPicture, addPhoto;
     private FloatingActionButton fabAdd;
@@ -58,16 +50,16 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
-
-        textFrom = ((EditText) findViewById(R.id.textFrom)).getText().toString();
-        textCarName = ((EditText) findViewById(R.id.textCarName)).getText().toString();
-        textTipe = ((EditText) findViewById(R.id.textTipe)).getText().toString();
-        textMerk = ((EditText) findViewById(R.id.textMerk)).getText().toString();
-        textPajakHari = ((EditText) findViewById(R.id.textPajakHari)).getText().toString();
-        textPajakMulai = ((EditText) findViewById(R.id.textPajakMulai)).getText().toString();
-        textServisHari = ((EditText) findViewById(R.id.textServisHari)).getText().toString();
-        textServisMulai = ((EditText) findViewById(R.id.textServisMulai)).getText().toString();
-
+/*
+        textFrom = ((EditText)findViewById(R.id.textFrom)).getText().toString();
+        textCarName = ((EditText)findViewById(R.id.textCarName)).getText().toString();
+        textTipe = ((EditText)findViewById(R.id.textTipe)).getText().toString();
+        textMerk = ((EditText)findViewById(R.id.textMerk)).getText().toString();
+        textPajakHari = ((EditText)findViewById(R.id.textPajakHari)).getText().toString();
+        textPajakMulai = ((EditText)findViewById(R.id.textPajakMulai)).getText().toString();
+        textServisHari = ((EditText)findViewById(R.id.textServisHari)).getText().toString();
+        textServisMulai = ((EditText)findViewById(R.id.textServisMulai)).getText().toString();
+*/
         IDProf = findViewById(R.id.imagePict);
         addPicture = findViewById(R.id.addPicture);
         addPicture.setOnClickListener(this);
@@ -140,11 +132,6 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                 c.close();
 
                 BitmapFactory.Options options = new BitmapFactory.Options();
-
-                // down sizing image as it throws OutOfMemory Exception for larger
-                // images
-                //options.inSampleSize = 8;
-
                 Bitmap thumbnail = BitmapFactory.decodeFile(picturePath, options);
 
                 if (thumbnail==null){
@@ -192,6 +179,14 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public  void onDone(List<Byte> x)  {
+                Byte[] byteArray = new Byte[x.size()];
+                x.toArray(byteArray);
+                JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte (byteArray) ));
+                if (data.get("success").equals("1")) {
+                    System.out.println("Berhasil Menyimpan data");
+                } else {
+                    System.out.println("Gagal Menyimpan data");
+                }
                 loading.dismiss();
 
             }
@@ -202,142 +197,17 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                 System.out.println("ERROR: " + msg);
             }
         };
-
         JSONObject dataJson = new JSONObject();
-        dataJson.put("tipe", textTipe);
-        dataJson.put("merk", textMerk);
-        dataJson.put("pajak_setiap_berapa_hari", textPajakHari);
-        dataJson.put("pajak_dimulai", textPajakMulai);
-        dataJson.put("servis_setiap_berapa_hari", textServisHari);
-        dataJson.put("servis_dimulai", textServisMulai);
-        dataJson.put("image", Document_img1);
-        net.sendUrl("http://192.168.225.189:8000/api/addvehicle", Lib.Companion.byteToByte((dataJson.toString()).getBytes()), 0);
-//        RetryPolicy mRetryPolicy = new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/api/test/",
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        try {
-//                            loading.dismiss();
-//                            Log.d("JSON", response);
-//
-//                            JSONObject eventObject = new JSONObject(response);
-//                            String error_status = eventObject.getString("ercdror");
-//                            if (error_status.equals("true")) {
-//                                String error_msg = eventObject.getString("msg");
-//                                ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
-//                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                                alertDialogBuilder.setTitle("Vendor Detail");
-//                                alertDialogBuilder.setCancelable(false);
-//                                alertDialogBuilder.setMessage(error_msg);
-//                                alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int id) {
-//
-//                                    }
-//                                });
-//                                alertDialogBuilder.show();
-//
-//                            } else {
-//                                String error_msg = eventObject.getString("msg");
-//                                ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-//                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                                alertDialogBuilder.setTitle("Registration");
-//                                alertDialogBuilder.setCancelable(false);
-//                                alertDialogBuilder.setMessage(error_msg);
-////                                alertDialogBuilder.setIcon(R.drawable.doubletick);
-//                                alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int id) {
-//                                        Intent intent=new Intent(AddVehicle.this, HomeActivity.class);
-//                                        startActivity(intent);
-//                                        finish();
-//                                    }
-//                                });
-//                                alertDialogBuilder.show();
-//                            }
-//                        }catch(Exception e){
-//                            Log.d("Tag", e.getMessage());
-//
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        loading.dismiss();
-//                        if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-//                            ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
-//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                            alertDialogBuilder.setTitle("No connection");
-//                            alertDialogBuilder.setMessage(" Connection time out error please try again ");
-//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//
-//                                }
-//                            });
-//                            alertDialogBuilder.show();
-//                        } else if (error instanceof AuthFailureError) {
-//                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                            alertDialogBuilder.setTitle("Connection Error");
-//                            alertDialogBuilder.setMessage(" Authentication failure connection error please try again ");
-//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//
-//                                }
-//                            });
-//                            alertDialogBuilder.show();
-//                            //TODO
-//                        } else if (error instanceof ServerError) {
-//                            ContextThemeWrapper ctw = new ContextThemeWrapper( AddVehicle.this, R.style.Theme_AlertDialog);
-//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                            alertDialogBuilder.setTitle("Connection Error");
-//                            alertDialogBuilder.setMessage("Connection error please try again");
-//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//
-//                                }
-//                            });
-//                            alertDialogBuilder.show();
-//                            //TODO
-//                        } else if (error instanceof NetworkError) {
-//                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                            alertDialogBuilder.setTitle("Connection Error");
-//                            alertDialogBuilder.setMessage("Network connection error please try again");
-//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//
-//                                }
-//                            });
-//                            alertDialogBuilder.show();
-//                            //TODO
-//                        } else if (error instanceof ParseError) {
-//                            ContextThemeWrapper ctw = new ContextThemeWrapper(AddVehicle.this, R.style.Theme_AlertDialog);
-//                            final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctw);
-//                            alertDialogBuilder.setTitle("Error");
-//                            alertDialogBuilder.setMessage("Parse error");
-//                            alertDialogBuilder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-//                                public void onClick(DialogInterface dialog, int id) {
-//
-//                                }
-//                            });
-//                            alertDialogBuilder.show();
-//                        }
-////                        Toast.makeText(Login_Activity.this,error.toString(), Toast.LENGTH_LONG ).show();
-//                    }
-//                }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                Map<String,String> map = new HashMap<String,String>();
-//                //map.put(KEY_User_Document1,Document_img1);
-//                System.out.println("GetParams() called");
-//                return map;
-//            }
-//        };
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(AddVehicle.this);
-//        stringRequest.setRetryPolicy(mRetryPolicy);
-//        requestQueue.add(stringRequest);
+        dataJson.put("username", Auth.user.getUsername());
+        dataJson.put("password", Auth.user.getPassword());
+        dataJson.put("tipe", ((EditText)findViewById(R.id.textTipe)).getText().toString());
+        dataJson.put("merk", ((EditText)findViewById(R.id.textMerk)).getText().toString());
+        dataJson.put("pajak_setiap_berapa_hari", ((EditText)findViewById(R.id.textPajakHari)).getText().toString());
+        dataJson.put("pajak_dimulai", ((EditText)findViewById(R.id.textPajakMulai)).getText().toString());
+        dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
+        dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
+        dataJson.put("photo", Document_img1);
+        net.sendUrl("http://192.168.43.129:8000/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }
 
     @Override
@@ -358,17 +228,6 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
 
             case R.id.fabAdd :
                 sendDetail();
-//            if (AppStatus.getInstance(this).isOnline()) {
-//                SendDetail();
-//
-//
-//                //           Toast.makeText(this,"You are online!!!!",Toast.LENGTH_LONG).show();
-//
-//            } else {
-//
-//                Toast.makeText(this,"You are not online!!!!",Toast.LENGTH_LONG).show();
-//                Log.v("Home", "############################You are not online!!!!");
-//            }
                 break;
         }
     }

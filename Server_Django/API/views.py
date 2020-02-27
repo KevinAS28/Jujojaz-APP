@@ -17,7 +17,7 @@ from Server_Django.settings import *
 def test(request):
     data = json.loads(request.POST['data'])
     image = data['image']
-    with open(os.path.join(settings.BASE_DIR, 'image.jpg'), 'wb') as writer:
+    with open(os.path.join(settings.BASE_DIR, 'image/image.jpg'), 'wb') as writer:
         b64_string = image.replace(" ", "+")
         print(b64_string)
         b64_byte = base64.decodebytes(b64_string.encode())
@@ -30,14 +30,11 @@ def test(request):
 def write_base64_file(base64_string, full_path):
     with open(full_path, 'wb') as writer:
         #b64_string = image.replace(" ", "+")
-        b64_string=b64_string.replace(' ', '+')
+        b64_string = b64_string.replace(' ', '+')
         #print(b64_string)
         b64_byte = base64.decodebytes(b64_string.encode())
         #print(len(b64_byte))
         writer.write(b64_byte)
-    
-    
-
 
 def create_account(request):
     #print(request.POST)
@@ -58,12 +55,11 @@ def create_account(request):
 
 @jujojaz_login
 def get_all_vehicle(request):
-    print(type(request.POST['data']))
     user = User.objects.get(username=json.loads(request.POST['data'])['username'])
     
     kendaraan = list(Vehicle.objects.filter(user=user))
     kendaraan_json = json.loads(serializers.serialize('json', kendaraan))
-    data = {"success": "true", "data": kendaraan_json}      
+    data = {"success": "1", "data": kendaraan_json}      
     print(f'get all ${user.username}\'s vehicles succeed')  
     return JsonResponse(data)
 
@@ -105,7 +101,7 @@ def edit_vehicle(request):
 def add_vehicle(request):
     data = json.loads(request.POST['data'])
     user = User.objects.get(username=data['username'])
-    data = json.loads(data['data'])
+    #data = json.loads(data['data'])
     merk_nama = data["merk"]
     merks = list(VehicleMerk.objects.filter(name=merk_nama))
     if (len(merks)):
