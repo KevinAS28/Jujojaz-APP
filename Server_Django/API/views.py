@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from Server_Django.library import jujojaz_login
+from Server_Django.library import *
 from .models import *
 from django.http.response import JsonResponse
 from django.core import serializers
@@ -12,7 +12,6 @@ import Server_Django.settings as settings
 import os
 from Server_Django.settings import *
 # Create your views here.
-
 
 def test(request):
     data = json.loads(request.POST['data'])
@@ -27,8 +26,8 @@ def test(request):
     #return HttpResponse('test')
     return JsonResponse({"success": '1'})
 
-def write_base64_file(base64_string, full_path):
-    with open(full_path, 'wb') as writer:
+def write_base64_file(b64_string, full_path):
+    with open(full_path + ".jpg", 'wb') as writer:
         #b64_string = image.replace(" ", "+")
         b64_string = b64_string.replace(' ', '+')
         #print(b64_string)
@@ -55,11 +54,16 @@ def create_account(request):
 
 @jujojaz_login
 def get_all_vehicle(request):
-    user = User.objects.get(username=json.loads(request.POST['data'])['username'])
-    
+    user = User.objects.get(username=json.loads(request.POST['data'])['username'])    
     kendaraan = list(Vehicle.objects.filter(user=user))
     kendaraan_json = json.loads(serializers.serialize('json', kendaraan))
-    data = {"success": "1", "data": kendaraan_json}      
+    for data in kendaraan_json :
+        data["fields"]["file_foto_b64"] = getB64StringImage(data["fields"]["foto_foto"])
+        merk = VehicleMerk.objects.get(id=int(data["fields"]["merk"]))
+        data["fields"]["merk"] = merk.name
+        tipe = VehicleType.objects.get(id=int(data["fields"]["tipe"]))
+        data["fields"]["tipe"] = tipe.name
+    data = {"success": "1", "data": kendaraan_json}
     print(f'get all ${user.username}\'s vehicles succeed')  
     return JsonResponse(data)
 
@@ -78,7 +82,7 @@ def edit_vehicle(request):
         merk_object.save()
 
     type_nama = data["tipe"]
-    types = list(Vehicletype.objects.filter(name=type_nama))
+    types = list(VehicleType.objects.filter(name=type_nama))
     if (len(types)):
         type_object = types[0]    
     else:
@@ -87,14 +91,16 @@ def edit_vehicle(request):
     
     user = User.objects.get(username=data['username'])
 
+    kendaraan.from_name = data["from_name"]
+    kendaraan.car_name = data["car_name"]
     kendaraan.tipe = type_object
     kendaraan.merk = merk_object
     kendaraan.pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
     kendaraan.pajak_dimulai = data["pajak_dimulai"]
     kendaraan.servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
-    kendaraan.servis_dimulai = data["servis_dimulai"]        
+    kendaraan.servis_dimulai = data["servis_dimulai"]
     kendaraan.save()
-    print(f'edit ${user.username}\'s vehicle succeed')  
+    print(f'edit ${user.username}\'s vehicle succeed')
     return JsonResponse({'success': '1'})
 
 @jujojaz_login
@@ -118,17 +124,19 @@ def add_vehicle(request):
         type_object = VehicleType(name=type_nama)
         type_object.save()
 
+    from_name = data["from_name"]
+    car_name = data["car_name"]
     tipe = type_object
     merk = merk_object
     pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
     pajak_dimulai = data["pajak_dimulai"]
     servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
-    servis_dimulai = data["servis_dimulai"]       
-    foto_foto_name = str(user.id)+'_'+str(Vehicle.objects.filter(user=user).order_by('id')[:1][0])
-    Vehicle(user=user, tipe=tipe, merk=merk, foto_foto_name=foto_foto_name, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
+    servis_dimulai = data["servis_dimulai"]
+    foto_foto = str(user.id) + '_' + car_name
+    Vehicle(user=user,from_name=from_name, car_name=car_name, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
     
     foto_file = data["photo"]
-    write_base64_file(foto_file, os.path.join(VEHICLE_PHOTOS_DIR, foto_foto_name))
+    write_base64_file(foto_file, os.path.join(PHOTOS_DIR, foto_foto))
     
     print(f'add ${user.username}\'s vehicles succeed')  
     return JsonResponse({'success': '1'})

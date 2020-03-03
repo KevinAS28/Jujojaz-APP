@@ -52,7 +52,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@android:color/white" />
+            android:maxLines="1"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:background="@android:color/white"
+            android:maxLength="50"
+            tools:ignore="TextFields" />
 
         <TextView
             android:id="@+id/passText"
@@ -69,8 +74,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:maxLines="1"
+            android:imeOptions="actionDone"
             android:background="@android:color/white"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:maxLength="50"/>
 
         <Button
             android:id="@+id/btnSignIn"

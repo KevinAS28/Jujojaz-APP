@@ -25,9 +25,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import json.JSONArray;
 import json.JSONObject;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddVehicle extends AppCompatActivity implements View.OnClickListener {
@@ -183,7 +185,48 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                 x.toArray(byteArray);
                 JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte (byteArray) ));
                 if (data.get("success").equals("1")) {
-                    System.out.println("Berhasil Menyimpan data");
+                    /*
+                    final ProgressDialog loading = new ProgressDialog(AddVehicle.this);
+                    loading.setMessage("Please Wait...");
+                    loading.show();
+                    loading.setCanceledOnTouchOutside(false);
+                     */
+                    JujojazLib net = new JujojazLib() {
+
+                        @Override
+                        public void onDone(List<Byte> x) {
+                            Byte[] byteArray = new Byte[x.size()];
+                            x.toArray(byteArray);
+                            JSONObject data = new JSONObject(new String(Lib.Companion.Bytetobyte(byteArray)));
+                            System.out.println(data.toString());
+                            if (data.get("success").equals("1")) {
+                                Auth.datas = new ArrayList<>();
+                                for (Object o: (JSONArray) data.get("data")) {
+                                    JSONObject dataObject = (JSONObject) o;
+                                    Log.d("AddVehicleData", dataObject.toString());
+                                    JSONObject dataFields = (JSONObject) dataObject.get("fields");
+                                    Auth.datas.add(new ModelData(Integer.valueOf(dataObject.get("pk").toString()),
+                                            dataFields.get("file_foto_b64").toString(),
+                                            dataFields.get("from_name").toString(),
+                                            dataFields.get("car_name").toString(),
+                                            dataFields.get("merk").toString(),
+                                            dataFields.get("tipe").toString(),
+                                            dataFields.get("servis_dimulai").toString(),
+                                            dataFields.get("servis_setiap_berapa_hari").toString(),
+                                            dataFields.get("pajak_dimulai").toString(),
+                                            dataFields.get("pajak_setiap_berapa_hari").toString()));
+                                }
+                            } else {
+                                System.out.println("Fail");
+                            }
+                            Log.d("AddVehicleData", String.valueOf(Auth.datas.size()));
+                            onBackPressed();
+                        }
+                    };
+                    JSONObject authJson = new JSONObject();
+                    authJson.put("username", Auth.user.getUsername());
+                    authJson.put("password", Auth.user.getPassword());
+                    net.sendUrl("http://192.168.225.236:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
                 } else {
                     System.out.println("Gagal Menyimpan data");
                 }
@@ -200,6 +243,8 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         JSONObject dataJson = new JSONObject();
         dataJson.put("username", Auth.user.getUsername());
         dataJson.put("password", Auth.user.getPassword());
+        dataJson.put("from_name", ((EditText)findViewById(R.id.textFrom)).getText().toString());
+        dataJson.put("car_name", ((EditText)findViewById(R.id.textCarName)).getText().toString());
         dataJson.put("tipe", ((EditText)findViewById(R.id.textTipe)).getText().toString());
         dataJson.put("merk", ((EditText)findViewById(R.id.textMerk)).getText().toString());
         dataJson.put("pajak_setiap_berapa_hari", ((EditText)findViewById(R.id.textPajakHari)).getText().toString());
@@ -207,7 +252,12 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
         dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
-        net.sendUrl("http://192.168.43.129:8000/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
+        net.sendUrl("http://192.168.225.236:8000/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     @Override

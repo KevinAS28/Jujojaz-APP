@@ -19,6 +19,8 @@ class Vehicle(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     tipe = models.ForeignKey(VehicleType, on_delete=models.DO_NOTHING)
     merk = models.ForeignKey(VehicleMerk, on_delete=models.DO_NOTHING)
+    from_name = models.CharField(max_length=25, default="")
+    car_name = models.CharField(max_length=25, default="")
     #foto_kendaraan = models.CharField(max_length=25, default="")
     # foto_stnk = models.CharField(max_length=25, default="")
     # foto_kuitansi_servis = models.CharField(max_length=25, default="")

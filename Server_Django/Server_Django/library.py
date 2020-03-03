@@ -2,6 +2,9 @@ from Crypto.Cipher import AES
 from django.http import JsonResponse
 from django.db import models
 from API.models import *
+import os
+import base64
+from Server_Django.settings import *
 from django.http import request as Request
 def padding(buff):
     while ((len(buff)%8)!=0):
@@ -57,4 +60,8 @@ def jujojaz_login(f):
             return JsonResponse({'success': '0', 'msg': 'Error'})
     return wrapper
 
-    
+def getB64StringImage(file) :
+    full_path = os.path.join(PHOTOS_DIR, file) + ".jpg"
+    with open(full_path, "rb") as reader :
+        b64_string = base64.encodebytes(reader.read())
+        return b64_string.decode()

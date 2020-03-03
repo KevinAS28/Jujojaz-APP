@@ -174,4 +174,4 @@ JWT_AUTH = {
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024000000000000
 PHOTOS_DIR = os.path.join(BASE_DIR, 'photos')
 VEHICLE_PHOTOS_DIR = os.path.join(PHOTOS_DIR, 'vehicles')
-VEHICLE_PHOTOS_DIR = os.path.join(PHOTOS_DIR, 'stnk')
+#VEHICLE_PHOTOS_DIR = os.path.join(PHOTOS_DIR, 'stnk')

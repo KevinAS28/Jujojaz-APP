@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -11,24 +12,31 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import json.JSONArray;
+import json.JSONObject;
+
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    //private FloatingActionButton fabHome;
+    private FloatingActionButton fabHome;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    public static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private List<ModelHomeActivity> data;
+    public List<ModelData> data = new ArrayList<>();
+    public static List<List<Integer>> id = new ArrayList<>();
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,21 +45,38 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         toolbar = findViewById(R.id.homeToolBar);
         setSupportActionBar(toolbar);
 
-        //fabHome = findViewById(R.id.fabHome);
-        //fabHome.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //   public void onClick(View v) {
-        //        Log.d("Home", v.toString());
-        //        Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
-        //        startActivity(intent);
-        //    }
-        //});
+        fabHome = findViewById(R.id.fabHome);
+        fabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+           public void onClick(View v) {
+                Log.d("Home", v.toString());
+                Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
+                startActivity(intent);
+            }
+        });
 
-        String[][] dataset = new String[][] {{"image", "Motor", "Kendaraan Roda 2"}, {"image", "Mobil", "Kendaraan Roda 4"}};
-        data = new ArrayList<>();
-        data.add(new ModelHomeActivity("image", "Motor", "Kendaraan Roda 2"));
-        data.add(new ModelHomeActivity("image", "Mobil", "Kendaraan Roda 4"));
-        Log.d("Home", data.toString());
+        List<String> checkTipe = new ArrayList<>();
+        id = new ArrayList<>();
+        for (ModelData o : Auth.datas) {
+            if (!checkTipe.contains(o.getTipe())) {
+                Log.d("HomeActivityTipe", o.getTipe());
+                StringBuilder merk = new StringBuilder();
+                List<Integer> idMerk = new ArrayList<>();
+                for (ModelData i : Auth.datas) {
+                    if (i.getTipe().equals(o.getTipe()) && !checkTipe.contains(i.getTipe())){
+                        merk.append(i.getMerk()).append("\n");
+                        idMerk.add(i.getId());
+                    }
+                }
+                checkTipe.add(o.getTipe());
+                data.add(new ModelData(o.getId(), merk.toString(), o.getTipe()));
+                id.add(idMerk);
+            }
+        }
+
+        Log.d("HomeActivityID", id.toString());
+        Log.d("HomeActivity", String.valueOf(Auth.datas.size()));
+        Log.d("HomeActivity", String.valueOf(data.size()));
 
         recyclerView = findViewById(R.id.recyclerViewHome);
         recyclerView.setHasFixedSize(true);
@@ -88,6 +113,13 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
@@ -95,9 +127,9 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String newText) {
         String userInput =  newText.toLowerCase();
-        List<ModelHomeActivity> newData = new ArrayList<>();
-        for (ModelHomeActivity dataset : data) {
-            if (dataset.getTitle().toLowerCase().contains(userInput)) {
+        List<ModelData> newData = new ArrayList<>();
+        for (ModelData dataset : data) {
+            if (dataset.getTipe().toLowerCase().contains(userInput)) {
                 newData.addAll(Collections.singleton(dataset));
             }
         }
@@ -109,4 +141,5 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         adapter.notifyDataSetChanged();
         return true;
     }
+
 }

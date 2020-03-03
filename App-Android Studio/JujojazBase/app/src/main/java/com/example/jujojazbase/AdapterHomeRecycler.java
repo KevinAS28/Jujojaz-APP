@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycler.viewHolder> {
-    public static List<ModelHomeActivity> data = new ArrayList<>();
+    public static List<ModelData> data = new ArrayList<>();
     private Context context;
 
 
@@ -38,7 +38,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
         }
     }
 
-    public AdapterHomeRecycler(Context context, List<ModelHomeActivity> myData) {
+    public AdapterHomeRecycler(Context context, List<ModelData> myData) {
         this.context = context;
         data = myData;
     }
@@ -54,14 +54,14 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
 
     @Override
     public void onBindViewHolder(@NonNull final viewHolder holder, int position) {
-        ModelHomeActivity dataset = data.get(position);
+        ModelData dataset = data.get(position);
         //Glide.with(context)
         //        .load(dataset.get(0))
         //        .apply(RequestOptions.circleCropTransform())
         //        .into(holder.foto);
         //holder.foto.setImageBitmap(stringToBitmap(dataset.getImage()));
-        holder.name.setText(dataset.getTitle());
-        holder.detail.setText(dataset.getDetail());
+        holder.name.setText(dataset.getTipe());
+        holder.detail.setText(dataset.getMerk());
         holder.btnMoreThan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +71,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
                 context.startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -88,5 +89,4 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
             return null;
         }
     }
-
 }

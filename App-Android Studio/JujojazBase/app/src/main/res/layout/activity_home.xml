@@ -29,7 +29,7 @@
             tools:listitem="@layout/item_list_home" />
 
     </LinearLayout>
-<!--
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabHome"
         android:layout_width="wrap_content"
@@ -40,5 +40,5 @@
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="#34eb67"
         app:srcCompat="@drawable/ic_add_black_30dp" />
--->
+
 </RelativeLayout>

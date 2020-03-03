@@ -1,8 +1,12 @@
 package com.example.jujojazbase;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +20,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycler.viewHolder> {
-    public static List<ModelEditVehicle> data;
-    private Context context;
+import json.JSONObject;
 
+public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycler.viewHolder> {
+    public static List<ModelData> datas = new ArrayList<>();
+    private Context context;
     public static class viewHolder extends RecyclerView.ViewHolder {
 
         TextView name, detail;
         ImageView foto;
-        ImageButton btnDown;
+        ImageButton btnDown, btnDelete, btnEdit;
         RelativeLayout relativeLayoutEdit;
 
         public viewHolder(@NonNull View itemView) {
@@ -35,13 +41,15 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
             detail = itemView.findViewById(R.id.detailEdit);
             foto = itemView.findViewById(R.id.fotoEdit);
             btnDown = itemView.findViewById(R.id.btnDown);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
             relativeLayoutEdit = itemView.findViewById(R.id.relativeLayoutEdit);
         }
     }
 
-    public AdapterEditRecycler(Context context, List<ModelEditVehicle> myData) {
+    public AdapterEditRecycler(Context context, List<ModelData> myData) {
         this.context = context;
-        data = myData;
+        datas = myData;
     }
 
     @NonNull
@@ -53,16 +61,54 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
         return vh;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final AdapterEditRecycler.viewHolder holder, final int position) {
-        final ModelEditVehicle dataset = data.get(position);
+        final ModelData dataset = datas.get(position);
         //Glide.with(context)
         //        .load(dataset.get(0))
         //        .apply(RequestOptions.circleCropTransform())
         //        .into(holder.foto);
-        //holder.foto.setImageBitmap(stringToBitmap(dataset.getImage()));
-        holder.name.setText(dataset.getTitle());
-        holder.detail.setText(dataset.getDetail());
+        holder.foto.setImageBitmap(stringToBitmap(dataset.getImage()));
+        holder.name.setText(dataset.getCar_name());
+        holder.detail.setText(dataset.getMerk());
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent edit = new Intent(context, EditInformation.class);
+                edit.putExtra("POSITION", position);
+                edit.putExtra("ID", dataset.getId());
+                context.startActivity(edit);
+            }
+        });
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JujojazLib net = new JujojazLib(){
+                    @Override
+                    public  void onDone(List<Byte> x) {
+                        Byte[] byteArray = new Byte[x.size()];
+                        x.toArray(byteArray);
+                        JSONObject data = new JSONObject(new String(Lib.Companion.Bytetobyte(byteArray)));
+                        System.out.println(data.toString());
+                        if (data.get("success").equals("1")) {
+                            Auth.datas.remove(position);
+                            datas.remove(position);
+                            notifyItemRemoved(position);
+                            notifyItemRangeRemoved(position, datas.size());
+
+                        } else {
+                            System.out.println("Fail");
+                            }
+                        }
+                    };
+                JSONObject deleteJson = new JSONObject();
+                deleteJson.put("username", Auth.user.getUsername());
+                deleteJson.put("password", Auth.user.getPassword());
+                deleteJson.put("id_kendaraan", dataset.getId());
+                net.sendUrl("http://192.168.225.236:8000/api/deletevehicle/", Lib.Companion.byteToByte(("data="+deleteJson.toString()).getBytes()), 0);
+            }
+        });
         holder.btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +126,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return datas.size();
     }
 
     public Bitmap stringToBitmap(String encodeString) {
