@@ -20,22 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
 
-import com.example.jujojazbase.Auth;
-import com.example.jujojazbase.JujojazLib;
-import com.example.jujojazbase.Lib;
-import com.example.jujojazbase.ModelData;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import json.JSONArray;
 import json.JSONObject;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class EditInformation extends AppCompatActivity implements View.OnClickListener {
@@ -252,7 +245,7 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
         dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
         dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
-        net.sendUrl("http://192.168.225.236:8000/api/editvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
+        net.sendUrl(Auth.API_SERVER + "/api/editvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }
 
     @Override

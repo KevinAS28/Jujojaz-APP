@@ -6,14 +6,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,7 +32,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class Auth extends AppCompatActivity implements View.OnClickListener {
@@ -40,6 +41,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     public static ModelUser user;
     public static List<ModelData> datas = new ArrayList<>();
     private JSONObject authJson;
+    public static String API_SERVER = "http://192.168.43.1:8000";
 
 
     public void createFileForLogin(String userJson){
@@ -92,6 +94,13 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
                     dataFields.get("pajak_setiap_berapa_hari").toString()));
         }
         startActivity(intent);
+
+        Intent broadcastNotification = new Intent(this, BroadcastNotification.class);
+        sendBroadcast(broadcastNotification);
+
+        Intent alarmManagerReceiver = new Intent(this, AlarmManagerReceiver.class);
+        sendBroadcast(alarmManagerReceiver);
+
         finish();
     }
 
@@ -240,7 +249,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
                 loginError("Koneksi Error");
             }
         }, 10000);
-        net.sendUrl("http://192.168.225.236:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
+        net.sendUrl(API_SERVER + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
         return authJson;
     }
 

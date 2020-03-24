@@ -106,7 +106,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
                 deleteJson.put("username", Auth.user.getUsername());
                 deleteJson.put("password", Auth.user.getPassword());
                 deleteJson.put("id_kendaraan", dataset.getId());
-                net.sendUrl("http://192.168.225.236:8000/api/deletevehicle/", Lib.Companion.byteToByte(("data="+deleteJson.toString()).getBytes()), 0);
+                net.sendUrl(Auth.API_SERVER + "/api/deletevehicle/", Lib.Companion.byteToByte(("data="+deleteJson.toString()).getBytes()), 0);
             }
         });
         holder.btnDown.setOnClickListener(new View.OnClickListener() {

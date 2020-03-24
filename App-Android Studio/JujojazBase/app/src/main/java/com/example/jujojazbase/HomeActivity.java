@@ -1,5 +1,8 @@
 package com.example.jujojazbase;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -97,6 +100,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         MenuItem logOut = menu.findItem(R.id.menuLogOut);
         logOut.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 File file = new File(getApplicationContext().getFilesDir(), "Auth");
@@ -104,11 +108,20 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                 Intent intent = new Intent(getApplicationContext(), Auth.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
+                Intent broadcastNotification = new Intent(HomeActivity.this, BroadcastNotification.class);
+                Notification.restart = false;
+                broadcastNotification.putExtra("STARTSERVICE", false);
+                sendBroadcast(broadcastNotification);
+
+                Intent alarmManagerReceiver = new Intent(HomeActivity.this, AlarmManagerReceiver.class);
+                alarmManagerReceiver.putExtra("STARTALARM", false);
+                sendBroadcast(alarmManagerReceiver);
+
                 finish();
                 return true;
             }
         });
-
         return true;
     }
 

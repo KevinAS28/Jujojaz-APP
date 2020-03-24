@@ -226,7 +226,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                     JSONObject authJson = new JSONObject();
                     authJson.put("username", Auth.user.getUsername());
                     authJson.put("password", Auth.user.getPassword());
-                    net.sendUrl("http://192.168.225.236:8000/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
+                    net.sendUrl(Auth.API_SERVER + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
                 } else {
                     System.out.println("Gagal Menyimpan data");
                 }
@@ -252,7 +252,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
         dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
-        net.sendUrl("http://192.168.225.236:8000/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
+        net.sendUrl(Auth.API_SERVER + "/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }
 
     @Override
