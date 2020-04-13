@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import json.JSONArray;
 import json.JSONObject;
+import kotlin.Unit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -40,9 +41,8 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     private Intent intent;
     public static ModelUser user;
     public static List<ModelData> datas = new ArrayList<>();
-    private JSONObject authJson;
-    public static String API_SERVER = "http://192.168.43.1:8000";
-
+    public static JSONObject authJson;
+    private Boolean apiOnly = true;
 
     public void createFileForLogin(String userJson){
         File file = new File(getApplicationContext().getFilesDir(), "Auth");
@@ -78,21 +78,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         createFileForLogin(authJson.toString());
         Log.d("Auth", data.toString());
-        for (Object o: (JSONArray) data.get("data")) {
-            JSONObject dataObject = (JSONObject) o;
-            Log.d("AuthData", dataObject.toString());
-            JSONObject dataFields = (JSONObject) dataObject.get("fields");
-            datas.add(new ModelData(Integer.valueOf(dataObject.get("pk").toString()),
-                    dataFields.get("file_foto_b64").toString(),
-                    dataFields.get("from_name").toString(),
-                    dataFields.get("car_name").toString(),
-                    dataFields.get("merk").toString(),
-                    dataFields.get("tipe").toString(),
-                    dataFields.get("servis_dimulai").toString(),
-                    dataFields.get("servis_setiap_berapa_hari").toString(),
-                    dataFields.get("pajak_dimulai").toString(),
-                    dataFields.get("pajak_setiap_berapa_hari").toString()));
-        }
+        datas = JujojazLib.Companion.convertJSONToModelData(data);
         startActivity(intent);
 
         Intent broadcastNotification = new Intent(this, BroadcastNotification.class);
@@ -120,7 +106,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    public void loginError(String msg){
+    public Unit loginError(String msg){
         if (!isFinishing()) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(Auth.this);
             builder.setCancelable(true);
@@ -134,6 +120,7 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
             });
             builder.show();
         }
+        return Unit.INSTANCE;
     }
 
     @Override
@@ -197,59 +184,36 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         });
     }
 
+    Unit loginResult(JSONObject data){
+        Log.println(Log.INFO, "INFO", "|"+data.get("success").toString()+"|");
+        if (data.get("success").toString().compareTo("1")==0) {
+            loginApiSucceed(data);
+            if (!apiOnly){
+                loginSucceed(data);
+            }
+        } else {
+            System.out.println("Fail");
+            loginApiFail(data);
+            if (!apiOnly){
+                loginFail(data);
+            }
+        }
+        return Unit.INSTANCE;
+    }
 
     public JSONObject loginApi(String username, String password, final Boolean apiOnly){
+        this.apiOnly = apiOnly;
+
         user = new ModelUser();
         user.setUsername(username);
         user.setPassword(password);
-        final ProgressDialog loading = new ProgressDialog(Auth.this);
-        loading.setMessage("Please Wait...");
-        loading.show();
-        loading.setCanceledOnTouchOutside(false);
-        JujojazLib net = new JujojazLib(){
 
-            @Override
-            public  void onDone(List<Byte> x)  {
-                Byte[] byteArray = new Byte[x.size()];
-                x.toArray(byteArray);
-                JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte (byteArray) ));
-                System.out.println(data.toString());
-                if (data.get("success").equals("1")){
-                    loginApiSucceed(data);
-                    if (!apiOnly){
-                        loading.dismiss();
-                        loginSucceed(data);
-                    }
-                }
-                else{
-                    System.out.println("Fail");
-                    loginApiFail(data);
-                    if (!apiOnly){
-                        loading.dismiss();
-                        loginFail(data);
-                    }
-                }
-            }
-
-
-
-            @Override
-            public void onError(String msg){
-                System.out.println("ERROR: " + msg);
-            }
-        };
         authJson = new JSONObject();
         authJson.put("username", username);
         authJson.put("password", password);
         Log.d("Auth", authJson.toString()) ;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loading.dismiss();
-                loginError("Koneksi Error");
-            }
-        }, 10000);
-        net.sendUrl(API_SERVER + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
+
+        JujojazLib.Companion.hitAPI("/api/allvehicles/", authJson, this, this::loginResult, this::loginError, true);
         return authJson;
     }
 

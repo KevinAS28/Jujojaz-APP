@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     public static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     public List<ModelData> data = new ArrayList<>();
+    public List<ModelData> new_data = new ArrayList<>();
     public static List<List<Integer>> id = new ArrayList<>();
 
     @Override
@@ -58,6 +59,25 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
 
+        //request new data
+        JujojazLib net = new JujojazLib(){
+            @Override
+            public  void onDone(List<Byte> x)  {
+                Byte[] byteArray = new Byte[x.size()];
+                x.toArray(byteArray);
+                JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte (byteArray) ));
+                new_data = JujojazLib.Companion.convertJSONToModelData(data);
+//                Log.println(Log.INFO, "onDone(): ", new_data.get(0).getCar_name());
+
+            }
+
+            @Override
+            public void onError(String msg){
+                System.out.println("ERROR: " + msg);
+            }
+        };
+        net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + Auth.authJson.toString()).getBytes()), 0);
+
         List<String> checkTipe = new ArrayList<>();
         id = new ArrayList<>();
         for (ModelData o : Auth.datas) {
@@ -67,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                 List<Integer> idMerk = new ArrayList<>();
                 for (ModelData i : Auth.datas) {
                     if (i.getTipe().equals(o.getTipe()) && !checkTipe.contains(i.getTipe())){
-                        merk.append(i.getMerk()).append("\n");
+                        merk.append(i.getCar_name()).append("\n");
                         idMerk.add(i.getId());
                     }
                 }
