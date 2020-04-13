@@ -46,7 +46,7 @@ def jujojaz_login(f):
         print(request)
         datas = allDatasMethods(request)
         datas = eval(datas["data"])
-        print(datas)
+        # print(datas)
         if ( ("username" in datas) and ("password" in datas)):
             user = list(User.objects.filter(username=datas["username"], password=datas["password"]))
             if (len(user)==0):
@@ -62,6 +62,9 @@ def jujojaz_login(f):
 
 def getB64StringImage(file) :
     full_path = os.path.join(PHOTOS_DIR, file) + ".jpg"
-    with open(full_path, "rb") as reader :
-        b64_string = base64.encodebytes(reader.read())
-        return b64_string.decode()
+    if os.path.isfile(full_path):
+        with open(full_path, "rb") as reader :
+            b64_string = base64.encodebytes(reader.read())
+            return b64_string.decode()
+    else:
+        return ""
