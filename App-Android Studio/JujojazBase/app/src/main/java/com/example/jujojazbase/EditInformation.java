@@ -1,6 +1,7 @@
 package com.example.jujojazbase;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +11,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import json.JSONObject;
 
 import java.io.*;
+import java.util.Calendar;
 import java.util.List;
 
 public class EditInformation extends AppCompatActivity implements View.OnClickListener {
@@ -109,6 +113,52 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
                         2);
             }
         }
+
+        textPajakMulai.setFocusableInTouchMode(false);
+        textPajakMulai.setInputType(InputType.TYPE_NULL);
+        textPajakMulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.println(Log.INFO, "AddVehicle", "onClick called");
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                DatePickerDialog picker = new DatePickerDialog(EditInformation.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                textPajakMulai.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            }
+                        }, year, month, day);
+                picker.show();
+
+            }
+        });
+
+        textServisMulai.setFocusableInTouchMode(false);
+        textServisMulai.setInputType(InputType.TYPE_NULL);
+        textServisMulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.println(Log.INFO, "AddVehicle", "onClick called");
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                DatePickerDialog picker = new DatePickerDialog(EditInformation.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                textServisMulai.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            }
+                        }, year, month, day);
+                picker.show();
+
+            }
+        });        
     }
 
     @Override
@@ -245,7 +295,7 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
         dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
         dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
-        net.sendUrl(Auth.API_SERVER + "/api/editvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
+        net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/editvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }
 
     @Override
