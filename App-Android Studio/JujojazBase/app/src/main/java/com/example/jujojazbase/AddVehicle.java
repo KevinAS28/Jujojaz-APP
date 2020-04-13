@@ -1,6 +1,7 @@
 package com.example.jujojazbase;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +11,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,20 +33,23 @@ import json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+
 public class AddVehicle extends AppCompatActivity implements View.OnClickListener {
+
     private String Document_img1="";
-/*
-    private String textFrom;
-    private String textCarName;
-    private String textTipe;
-    private String textMerk;
-    private String textPajakHari;
-    private String textPajakMulai;
-    private String textServisHari;
-    private String textServisMulai;
- */
+
+//    private String textCarName;
+//    private String textTipe;
+//    private String textMerk;
+//    private String textPajakHari;
+//    private String textServisHari;
+//    private String textFrom;
+    private EditText textServisMulai;
+    private EditText textPajakMulai;
+
     private ImageView IDProf;
     private ImageButton addPicture, addPhoto;
     private FloatingActionButton fabAdd;
@@ -52,16 +58,16 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_vehicle);
-/*
-        textFrom = ((EditText)findViewById(R.id.textFrom)).getText().toString();
-        textCarName = ((EditText)findViewById(R.id.textCarName)).getText().toString();
-        textTipe = ((EditText)findViewById(R.id.textTipe)).getText().toString();
-        textMerk = ((EditText)findViewById(R.id.textMerk)).getText().toString();
-        textPajakHari = ((EditText)findViewById(R.id.textPajakHari)).getText().toString();
-        textPajakMulai = ((EditText)findViewById(R.id.textPajakMulai)).getText().toString();
-        textServisHari = ((EditText)findViewById(R.id.textServisHari)).getText().toString();
-        textServisMulai = ((EditText)findViewById(R.id.textServisMulai)).getText().toString();
-*/
+
+//        textFrom = ((EditText)findViewById(R.id.textFrom)).getText().toString();
+//        textCarName = ((EditText)findViewById(R.id.textCarName)).getText().toString();
+//        textTipe = ((EditText)findViewById(R.id.textTipe)).getText().toString();
+//        textMerk = ((EditText)findViewById(R.id.textMerk)).getText().toString();
+//        textPajakHari = ((EditText)findViewById(R.id.textPajakHari)).getText().toString();
+//        textServisHari = ((EditText)findViewById(R.id.textServisHari)).getText().toString();
+        textPajakMulai = findViewById(R.id.textPajakMulai);
+        textServisMulai = findViewById(R.id.textServisMulai);
+
         IDProf = findViewById(R.id.imagePict);
         addPicture = findViewById(R.id.addPicture);
         addPicture.setOnClickListener(this);
@@ -89,6 +95,53 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                         2);
             }
         }
+
+        textPajakMulai.setFocusableInTouchMode(false);
+        textPajakMulai.setInputType(InputType.TYPE_NULL);
+        textPajakMulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.println(Log.INFO, "AddVehicle", "onClick called");
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                DatePickerDialog picker = new DatePickerDialog(AddVehicle.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                textPajakMulai.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            }
+                        }, year, month, day);
+                picker.show();
+
+            }
+        });
+
+        textServisMulai.setFocusableInTouchMode(false);
+        textServisMulai.setInputType(InputType.TYPE_NULL);
+        textServisMulai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.println(Log.INFO, "AddVehicle", "onClick called");
+                final Calendar cldr = Calendar.getInstance();
+                int day = cldr.get(Calendar.DAY_OF_MONTH);
+                int month = cldr.get(Calendar.MONTH);
+                int year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                DatePickerDialog picker = new DatePickerDialog(AddVehicle.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                textServisMulai.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            }
+                        }, year, month, day);
+                picker.show();
+
+            }
+        });
+
     }
 
     @Override
@@ -147,6 +200,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
             }
         }
     }
+
     public String BitMapToString(Bitmap userImage1) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         userImage1.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -226,7 +280,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                     JSONObject authJson = new JSONObject();
                     authJson.put("username", Auth.user.getUsername());
                     authJson.put("password", Auth.user.getPassword());
-                    net.sendUrl(Auth.API_SERVER + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
+                    net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + authJson.toString()).getBytes()), 0);
                 } else {
                     System.out.println("Gagal Menyimpan data");
                 }
@@ -252,7 +306,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
         dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
-        net.sendUrl(Auth.API_SERVER + "/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
+        net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }
 
     @Override
