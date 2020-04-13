@@ -55,6 +55,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
     @NonNull
     @Override
     public AdapterEditRecycler.viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        parent.removeAllViews();
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_edit , parent, false);
         AdapterEditRecycler.viewHolder vh = new AdapterEditRecycler.viewHolder(v);
@@ -106,7 +107,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
                 deleteJson.put("username", Auth.user.getUsername());
                 deleteJson.put("password", Auth.user.getPassword());
                 deleteJson.put("id_kendaraan", dataset.getId());
-                net.sendUrl(Auth.API_SERVER + "/api/deletevehicle/", Lib.Companion.byteToByte(("data="+deleteJson.toString()).getBytes()), 0);
+                net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/deletevehicle/", Lib.Companion.byteToByte(("data="+deleteJson.toString()).getBytes()), 0);
             }
         });
         holder.btnDown.setOnClickListener(new View.OnClickListener() {

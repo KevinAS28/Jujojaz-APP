@@ -26,15 +26,17 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
     public static class viewHolder extends RecyclerView.ViewHolder {
 
         TextView name, detail;
-        ImageView foto;
+        ImageView vehicleGroupImage;
         ImageView btnMoreThan;
 
         public viewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
             detail = itemView.findViewById(R.id.detail);
-            foto = itemView.findViewById(R.id.foto);
+            vehicleGroupImage = itemView.findViewById(R.id.vehicle_group_photo);
             btnMoreThan = itemView.findViewById(R.id.btnMoreThan);
+
+
         }
     }
 
@@ -46,9 +48,9 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        View vehicleGroupRow = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_list_home, parent, false);
-        viewHolder vh = new viewHolder(v);
+        viewHolder vh = new viewHolder(vehicleGroupRow);
         return vh;
     }
 
@@ -71,7 +73,7 @@ public class AdapterHomeRecycler extends RecyclerView.Adapter<AdapterHomeRecycle
                 context.startActivity(intent);
             }
         });
-
+        holder.vehicleGroupImage.setImageBitmap(stringToBitmap(dataset.getImage()));
     }
 
     @Override
