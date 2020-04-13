@@ -18,11 +18,11 @@ def test(request):
     image = data['image']
     with open(os.path.join(settings.BASE_DIR, 'image/image.jpg'), 'wb') as writer:
         b64_string = image.replace(" ", "+")
-        print(b64_string)
+        # print(b64_string)
         b64_byte = base64.decodebytes(b64_string.encode())
         print(len(b64_byte))
         #b64_string += "=" * ((4 - len(b64_string) % 4) % 4) #ugh
-        writer.write(b64_byte)
+        # writer.write(b64_byte)
     #return HttpResponse('test')
     return JsonResponse({"success": '1'})
 
@@ -132,7 +132,7 @@ def add_vehicle(request):
     pajak_dimulai = data["pajak_dimulai"]
     servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
     servis_dimulai = data["servis_dimulai"]
-    foto_foto = str(user.id) + '_' + car_name
+    foto_foto = str(user.id) + '_' +  car_name.replace(' ', '_')
     Vehicle(user=user,from_name=from_name, car_name=car_name, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
     
     foto_file = data["photo"]
@@ -144,7 +144,10 @@ def add_vehicle(request):
 @jujojaz_login
 def delete_vehicle(request):
     data = json.loads(request.POST['data'])
-    user = User.objects.get(username=data['username'])
+    try:
+        user = User.objects.get(username=data['username'])
+    except:
+        return JsonResponse({'success': '1'})
     id_kendaraan = data["id_kendaraan"]
     kendaraan = Vehicle.objects.get(id=id_kendaraan)
     kendaraan.delete()
