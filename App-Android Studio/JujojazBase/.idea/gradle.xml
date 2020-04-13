@@ -11,8 +11,8 @@
         <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="/media/data/jujojaz/Jujojaz-APP/App-Android Studio/JujojazBase" />
+            <option value="/media/data/jujojaz/Jujojaz-APP/App-Android Studio/JujojazBase/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
