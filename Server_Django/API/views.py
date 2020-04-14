@@ -11,6 +11,7 @@ import base64
 import Server_Django.settings as settings
 import os
 from Server_Django.settings import *
+from datetime import datetime
 # Create your views here.
 
 def test(request):
@@ -25,6 +26,37 @@ def test(request):
         # writer.write(b64_byte)
     #return HttpResponse('test')
     return JsonResponse({"success": '1'})
+
+def checkPajakServis(request):
+    user = User.objects.get(username=json.loads(request.POST['data'])['username'])    
+    semua_kendaraan = list(Vehicle.objects.filter(user=user))
+    to_return = {"success": "1", "pajak": [], "servis":[]}
+    now = datetime.now().date()
+
+    range_days_notif = list(range(0, 8))
+
+    for kendaraan in semua_kendaraan:
+        pajak_days = int((kendaraan.pajak_dimulai-now).days+kendaraan.pajak_setiap_berapa_hari)
+        servis_days = int((kendaraan.servis_dimulai-now).days+kendaraan.servis_setiap_berapa_hari)
+        
+        print(pajak_days, servis_days)
+
+        
+        if pajak_days<=0:
+            kendaraan.pajak_dimulai = "%d-%d-%d"%(now.year, now.month, now.day)
+            kendaraan.save()
+
+        if servis_days<=0:
+            kendaraan.servis_dimulai = "%d-%d-%d"%(now.year, now.month, now.day)            
+            kendaraan.save()
+
+        if (pajak_days in range_days_notif):
+            to_return["pajak"].append([str(kendaraan.car_name), str(pajak_days)])
+
+        if (servis_days in range_days_notif):
+            to_return["servis"].append([str(kendaraan.car_name), str(servis_days)])
+
+    return JsonResponse(to_return)
 
 def write_base64_file(b64_string, full_path):
     with open(full_path + ".jpg", 'wb') as writer:
@@ -51,7 +83,6 @@ def create_account(request):
     
     return JsonResponse({'success': '1'})
     
-
 @jujojaz_login
 def get_all_vehicle(request):
     user = User.objects.get(username=json.loads(request.POST['data'])['username'])    
@@ -134,10 +165,8 @@ def add_vehicle(request):
     servis_dimulai = data["servis_dimulai"]
     foto_foto = str(user.id) + '_' +  car_name.replace(' ', '_')
     Vehicle(user=user,from_name=from_name, car_name=car_name, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
-    
     foto_file = data["photo"]
     write_base64_file(foto_file, os.path.join(PHOTOS_DIR, foto_foto))
-    
     print(f'add ${user.username}\'s vehicles succeed')  
     return JsonResponse({'success': '1'})
 
