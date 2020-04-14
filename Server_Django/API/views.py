@@ -144,12 +144,12 @@ def add_vehicle(request):
 @jujojaz_login
 def delete_vehicle(request):
     data = json.loads(request.POST['data'])
+    user = User.objects.get(username=data['username'])
+    id_kendaraan = data["id_kendaraan"]
     try:
-        user = User.objects.get(username=data['username'])
+        kendaraan = Vehicle.objects.get(id=id_kendaraan)
     except:
         return JsonResponse({'success': '1'})
-    id_kendaraan = data["id_kendaraan"]
-    kendaraan = Vehicle.objects.get(id=id_kendaraan)
     kendaraan.delete()
     print(f'remove ${user.username}\'s vehicles succeed')  
     return JsonResponse({'success': '1'})
