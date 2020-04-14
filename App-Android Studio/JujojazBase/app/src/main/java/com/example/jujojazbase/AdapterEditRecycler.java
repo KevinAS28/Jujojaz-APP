@@ -32,14 +32,17 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
 
         TextView name, detail;
         ImageView foto;
+        ImageView foto_besar;
         ImageButton btnDown, btnDelete, btnEdit;
         RelativeLayout relativeLayoutEdit;
+
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.nameEdit);
             detail = itemView.findViewById(R.id.detailEdit);
             foto = itemView.findViewById(R.id.fotoEdit);
+            foto_besar = itemView.findViewById(R.id.img_big);
             btnDown = itemView.findViewById(R.id.btnDown);
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnEdit = itemView.findViewById(R.id.btnEdit);
@@ -71,6 +74,7 @@ public class AdapterEditRecycler extends RecyclerView.Adapter<AdapterEditRecycle
         //        .apply(RequestOptions.circleCropTransform())
         //        .into(holder.foto);
         holder.foto.setImageBitmap(stringToBitmap(dataset.getImage()));
+        holder.foto_besar.setImageBitmap(stringToBitmap(dataset.getImage()));
         holder.name.setText(dataset.getCar_name());
         holder.detail.setText(dataset.getMerk());
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {

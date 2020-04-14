@@ -84,7 +84,7 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
         textServisMulai = findViewById(R.id.textServisMulai);
         textServisMulai.setText(data.getServis_dimulai());
 
-        IDProf = findViewById(R.id.imagePict);
+        IDProf = findViewById(R.id.imagePict0);
         IDProf.setImageBitmap(stringToBitmap(data.getImage()));
         Document_img1 = data.getImage();
         addPicture = findViewById(R.id.addPicture);
@@ -156,7 +156,6 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
                             }
                         }, year, month, day);
                 picker.show();
-
             }
         });        
     }

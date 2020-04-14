@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import json.JSONObject;
+import kotlin.Unit;
+
 public class EditVehicle extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private Toolbar toolbar;
     private FloatingActionButton fabEdit;
@@ -23,34 +26,22 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
     public static RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     public List<ModelData> data = new ArrayList<>();
+    public List<ModelData> new_data = new ArrayList<>();
 
-    @SuppressLint("Assert")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_vehicle);
-
+    private Unit onDone(JSONObject json){
         Bundle bundle = getIntent().getExtras();
         int positionAdapter = bundle.getInt("POSITION");
         List<Integer> dataID = HomeActivity.id.get(positionAdapter);
+        new_data = JujojazLib.Companion.convertJSONToModelData(json);
 
-        for (ModelData o : Auth.datas) {
+        for (ModelData o : new_data) {
             if (dataID.contains(o.getId())) {
                 data.add(o);
             }
         }
+
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-/*
-        fabEdit = findViewById(R.id.fabEdit);
-        fabEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
-                startActivity(intent);
-            }
-        });
-*/
 
         recyclerView = findViewById(R.id.recyclerViewEdit);
         recyclerView.setHasFixedSize(true);
@@ -60,6 +51,21 @@ public class EditVehicle extends AppCompatActivity implements SearchView.OnQuery
 
         adapter = new AdapterEditRecycler(this, data);
         recyclerView.setAdapter(adapter);
+        return Unit.INSTANCE;
+    }
+
+    private Unit onError(String msg){
+        return Unit.INSTANCE;
+    }
+
+    @SuppressLint("Assert")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_vehicle);
+
+        JujojazLib.Companion.hitAPI("/api/allvehicles/", Auth.authJson, this, this::onDone, this::onError, true);
+
     }
 
     @Override

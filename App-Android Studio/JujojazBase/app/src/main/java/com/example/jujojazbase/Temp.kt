@@ -1,10 +1,15 @@
+package com.example.jujojazbase;
 
 
-
+import android.app.Activity
 import json.*;
 
-class Temp{
+open class Temp{
     companion object {
-        var data = JSONObject();
+        open var data = JSONObject();
+        open var anyActivity: Activity = Activity()
+        open var notificationTitle = ""
+        open var notificationText = ""
+        open var notificationChannel = "Jujojaz App"
     }
 }

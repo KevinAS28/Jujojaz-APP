@@ -30,6 +30,7 @@ import java.util.List;
 
 import json.JSONArray;
 import json.JSONObject;
+import kotlin.Unit;
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private FloatingActionButton fabHome;
@@ -41,51 +42,16 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     public List<ModelData> new_data = new ArrayList<>();
     public static List<List<Integer>> id = new ArrayList<>();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
-        toolbar = findViewById(R.id.homeToolBar);
-        setSupportActionBar(toolbar);
-
-        fabHome = findViewById(R.id.fabHome);
-        fabHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-           public void onClick(View v) {
-                Log.d("Home", v.toString());
-                Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
-                startActivity(intent);
-            }
-        });
-
-        //request new data
-        JujojazLib net = new JujojazLib(){
-            @Override
-            public  void onDone(List<Byte> x)  {
-                Byte[] byteArray = new Byte[x.size()];
-                x.toArray(byteArray);
-                JSONObject data = new JSONObject(new String( Lib.Companion.Bytetobyte (byteArray) ));
-                new_data = JujojazLib.Companion.convertJSONToModelData(data);
-//                Log.println(Log.INFO, "onDone(): ", new_data.get(0).getCar_name());
-
-            }
-
-            @Override
-            public void onError(String msg){
-                System.out.println("ERROR: " + msg);
-            }
-        };
-        net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/allvehicles/", Lib.Companion.byteToByte(("data=" + Auth.authJson.toString()).getBytes()), 0);
-
+    public Unit onDone(JSONObject json){
+        new_data = JujojazLib.Companion.convertJSONToModelData(json);
         List<String> checkTipe = new ArrayList<>();
         id = new ArrayList<>();
-        for (ModelData o : Auth.datas) {
+        for (ModelData o : this.new_data) {
             if (!checkTipe.contains(o.getTipe())) {
                 Log.d("HomeActivityTipe", o.getTipe());
                 StringBuilder merk = new StringBuilder();
                 List<Integer> idMerk = new ArrayList<>();
-                for (ModelData i : Auth.datas) {
+                for (ModelData i : this.new_data) {
                     if (i.getTipe().equals(o.getTipe()) && !checkTipe.contains(i.getTipe())){
                         merk.append(i.getCar_name()).append("\n");
                         idMerk.add(i.getId());
@@ -109,6 +75,33 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         adapter = new AdapterHomeRecycler(this, data);
         recyclerView.setAdapter(adapter);
+        return Unit.INSTANCE;
+    }
+    public Unit onError(String msg){
+        return Unit.INSTANCE;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+
+        toolbar = findViewById(R.id.homeToolBar);
+        setSupportActionBar(toolbar);
+
+        fabHome = findViewById(R.id.fabHome);
+        fabHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+           public void onClick(View v) {
+                Log.d("Home", v.toString());
+                Intent intent = new Intent(getApplicationContext(), AddVehicle.class);
+                startActivity(intent);
+            }
+        });
+
+        JujojazLib.Companion.hitAPI("/api/allvehicles/", Auth.authJson, this, this::onDone, this::onError, true);
+
+
     }
 
     @Override

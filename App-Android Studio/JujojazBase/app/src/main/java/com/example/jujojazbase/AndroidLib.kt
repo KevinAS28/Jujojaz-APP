@@ -249,7 +249,6 @@ class AndroidLib() : AppCompatActivity() {
         } catch (yay: Exception) {
             return false;
         }
-
     }
 
     fun readFileByte(file: String): ByteArray {

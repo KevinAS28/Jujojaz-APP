@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Handler
-import android.widget.Toast
 import com.example.jujojazbase.Lib.Companion.Bytetobyte
 import com.example.jujojazbase.Lib.Companion.byteToByte
 import json.JSONObject
@@ -26,9 +25,10 @@ open class JujojazLib:Network<ByteArray> {
     }
 
     companion object {
-        fun hitAPI(api: String, json: JSONObject, context: Activity, onAPIDone: (data: JSONObject)->Unit, onAPIError: (msg: String)->Unit, showLoading: Boolean){
-            val loading = ProgressDialog(context)
+        fun hitAPI(api: String, json: JSONObject, activity: Activity?, onAPIDone: (data: JSONObject)->Unit, onAPIError: (msg: String)->Unit, showLoading: Boolean){
+            var loading = ProgressDialog(Temp.anyActivity)
             if (showLoading){
+                loading = ProgressDialog(activity)
                 if (loading.context!=null){
                     loading.setMessage("Please Wait...")
                     loading.show()
@@ -42,26 +42,39 @@ open class JujojazLib:Network<ByteArray> {
                     val data = JSONObject(String(Bytetobyte(byteArray)))
                     println(data.toString())
                     onAPIDone(data);
-                    loading.dismiss();
+
+                    if (showLoading){
+                        loading.dismiss()
+                    }
                 }
 
                 override fun onError(msg: String) {
                     println("ERROR: $msg")
-
-                    context.runOnUiThread(Runnable { onAPIError(msg) })
-                    loading.dismiss();
+                    if (activity!=null){
+                        (activity).runOnUiThread(Runnable { onAPIError(msg) })
+                    }
+                    else{
+                        onAPIError(msg);
+                    }
+                    if (showLoading){
+                        loading.dismiss();
+                    }
                 }
             }
             if (showLoading){
                 Handler().postDelayed({
-                    if (loading.isShowing){
-                        loading.dismiss()
-                        onAPIError("Connection Error");
+                    if (showLoading){
+                        if (loading.isShowing){
+                            loading.dismiss()
+                            onAPIError("Connection Error");
+                        }
                     }
+
                 }, 10000)
             }
             net.sendUrl(Configuration.API_SERVER+api, byteToByte(("data=" + json.toString()).toByteArray()) as Array<Byte>, 0)
         }
+
         fun convertJSONToModelData(json: JSONObject): MutableList<ModelData> {
 
 

@@ -68,7 +68,7 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         textPajakMulai = findViewById(R.id.textPajakMulai);
         textServisMulai = findViewById(R.id.textServisMulai);
 
-        IDProf = findViewById(R.id.imagePict);
+        IDProf = findViewById(R.id.imagePict0);
         addPicture = findViewById(R.id.addPicture);
         addPicture.setOnClickListener(this);
         addPhoto = findViewById(R.id.addPhoto);

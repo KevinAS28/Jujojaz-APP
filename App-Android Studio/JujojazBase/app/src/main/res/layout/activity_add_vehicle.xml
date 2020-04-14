@@ -159,13 +159,36 @@
                 </LinearLayout>
 
             </LinearLayout>
-
             <ImageView
-                android:id="@+id/imagePict"
+                android:layout_weight="3"
+                android:id="@+id/imagePict0"
                 android:layout_gravity="center"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 app:srcCompat="@drawable/ic_image_black_24dp"/>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="108dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                >-->
+<!--                -->
+<!--                <ImageView-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:id="@+id/imagePict1"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_width="180dp"-->
+<!--                    android:layout_height="180dp"-->
+<!--                    app:srcCompat="@drawable/ic_image_black_24dp"/>-->
+<!--                <ImageView-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:id="@+id/imagePict2"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_width="180dp"-->
+<!--                    android:layout_height="180dp"-->
+<!--                    app:srcCompat="@drawable/ic_image_black_24dp"/>-->
+
+<!--            </LinearLayout>-->
+
 
         </LinearLayout>
 

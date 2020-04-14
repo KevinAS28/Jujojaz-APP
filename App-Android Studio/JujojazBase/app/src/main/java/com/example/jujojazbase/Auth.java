@@ -157,6 +157,9 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //store to temp, in case if any class need a non-null instance
+        Temp.Companion.setAnyActivity(this);
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -194,8 +197,6 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
             System.out.println("Belum Login");
             showLoginUI();
         }
-
-
     }
 
     Unit loginResult(JSONObject data){
@@ -226,8 +227,9 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         authJson.put("username", username);
         authJson.put("password", password);
         Log.d("Auth", authJson.toString()) ;
+        JujojazLib.Companion.hitAPI("/api/allvehicles/", authJson, this, this::loginResult, this::loginError, true);
         try{
-            JujojazLib.Companion.hitAPI("/api/allvehicles/", authJson, this, this::loginResult, this::loginError, true);
+
         }catch (RuntimeException e){
             String msg = e.getMessage();
             loginApiError(msg);

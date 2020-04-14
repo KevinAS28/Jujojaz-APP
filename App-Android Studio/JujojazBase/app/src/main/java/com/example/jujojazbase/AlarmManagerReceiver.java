@@ -16,7 +16,7 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
         assert alarmManager != null;
         boolean startAlarm = intent.getBooleanExtra("STARTALARM", true);
         if (startAlarm) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 43200000, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 2000, pendingIntent);
         } else {
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
