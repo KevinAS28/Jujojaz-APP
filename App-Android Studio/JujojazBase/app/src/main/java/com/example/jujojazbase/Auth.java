@@ -89,8 +89,30 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
 
         finish();
     }
+    public void showLoginUI(){
+        setContentView(R.layout.activity_auth);
 
+        signIn = findViewById(R.id.btnSignIn);
+        signIn.setOnClickListener(this);
+
+        email = findViewById(R.id.emailEText);
+        password = findViewById(R.id.passEText);
+        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    System.out.println("Password : Tekan Enter");
+                    signIn.performClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+    }
     public void loginFail(JSONObject data){
+        showLoginUI();
+
         if (!isFinishing()) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(Auth.this);
             builder.setCancelable(true);
@@ -107,19 +129,27 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
     }
 
     public Unit loginError(String msg){
+        //set constant error message
+        msg = "Koneksi error. harap periksa koneksi internet anda atau coba lagi nanti";
+
         if (!isFinishing()) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(Auth.this);
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(true);
             builder.setInverseBackgroundForced(true);
+//            Log.println(Log.INFO, "loginError(): ", msg);
             builder.setMessage(msg);
             builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
+                    System.exit(0);
                 }
             });
+
             builder.show();
         }
+
+
         return Unit.INSTANCE;
     }
 
@@ -162,26 +192,10 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
             loginApi(loginJson.get("username").toString(), loginJson.get("password").toString(), false);
         } catch (Exception e) {
             System.out.println("Belum Login");
+            showLoginUI();
         }
 
-        setContentView(R.layout.activity_auth);
 
-        signIn = findViewById(R.id.btnSignIn);
-        signIn.setOnClickListener(this);
-
-        email = findViewById(R.id.emailEText);
-        password = findViewById(R.id.passEText);
-        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    System.out.println("Password : Tekan Enter");
-                    signIn.performClick();
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     Unit loginResult(JSONObject data){
@@ -212,8 +226,16 @@ public class Auth extends AppCompatActivity implements View.OnClickListener {
         authJson.put("username", username);
         authJson.put("password", password);
         Log.d("Auth", authJson.toString()) ;
+        try{
+            JujojazLib.Companion.hitAPI("/api/allvehicles/", authJson, this, this::loginResult, this::loginError, true);
+        }catch (RuntimeException e){
+            String msg = e.getMessage();
+            loginApiError(msg);
+            if (!apiOnly){
+                loginError(msg);
+            }
+        }
 
-        JujojazLib.Companion.hitAPI("/api/allvehicles/", authJson, this, this::loginResult, this::loginError, true);
         return authJson;
     }
 
