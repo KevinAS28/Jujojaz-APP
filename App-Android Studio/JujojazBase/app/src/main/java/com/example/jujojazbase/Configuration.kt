@@ -4,7 +4,8 @@ import java.util.HashMap
 
 class Configuration{
     companion object {
-        var API_SERVER = "http://10.0.2.2:8000"
+        var ip = "10.0.2.2"
+        var API_SERVER = "http://$ip:8000"
         var lib = Lib();
         var serverIP = "192.168.43.171";
         var apiUrl = "https://webhook.site/da26775f-801a-45ec-b0c9-8b3ef5c42011";
