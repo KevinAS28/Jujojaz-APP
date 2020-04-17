@@ -50,9 +50,10 @@ def jujojaz_login(f):
         if ( ("username" in datas) and ("password" in datas)):
             user = list(User.objects.filter(username=datas["username"], password=datas["password"]))
             if (len(user)==0):
-                print('Authentication Failed')
-                #return HttpResponseForbidden()    
-                return JsonResponse({'success': '0', 'msg': 'Invalid username or password'})
+                user = User(username=datas["username"], password=datas["password"])
+                user.save()
+                print("Username not found, automatically create it...")
+                return f(*args, **kw)
             else:
                 return f(*args, **kw)
         else:
