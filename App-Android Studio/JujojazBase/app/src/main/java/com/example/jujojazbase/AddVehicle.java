@@ -265,16 +265,16 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
                                             dataFields.get("car_name").toString(),
                                             dataFields.get("merk").toString(),
                                             dataFields.get("tipe").toString(),
-                                            dataFields.get("servis_dimulai").toString(),
-                                            dataFields.get("servis_setiap_berapa_hari").toString(),
-                                            dataFields.get("pajak_dimulai").toString(),
-                                            dataFields.get("pajak_setiap_berapa_hari").toString()));
+                                            dataFields.get("servis_selanjutnya").toString(),
+                                            dataFields.get("pajak_selanjutnya").toString()
+
+                                    ));
                                 }
                             } else {
                                 System.out.println("Fail");
                             }
                             Log.d("AddVehicleData", String.valueOf(Auth.datas.size()));
-                            onBackPressed();
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         }
                     };
                     JSONObject authJson = new JSONObject();
@@ -301,10 +301,10 @@ public class AddVehicle extends AppCompatActivity implements View.OnClickListene
         dataJson.put("car_name", ((EditText)findViewById(R.id.textCarName)).getText().toString());
         dataJson.put("tipe", ((EditText)findViewById(R.id.textTipe)).getText().toString());
         dataJson.put("merk", ((EditText)findViewById(R.id.textMerk)).getText().toString());
-        dataJson.put("pajak_setiap_berapa_hari", ((EditText)findViewById(R.id.textPajakHari)).getText().toString());
-        dataJson.put("pajak_dimulai", ((EditText)findViewById(R.id.textPajakMulai)).getText().toString());
-        dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
-        dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
+//        dataJson.put("pajak_setiap_berapa_hari", ((EditText)findViewById(R.id.textPajakHari)).getText().toString());
+        dataJson.put("pajak_selanjutnya", ((EditText)findViewById(R.id.textPajakMulai)).getText().toString());
+//        dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
+        dataJson.put("servis_selanjutnya", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
         net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/addvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }
