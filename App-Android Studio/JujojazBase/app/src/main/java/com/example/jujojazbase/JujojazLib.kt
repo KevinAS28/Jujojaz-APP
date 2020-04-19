@@ -83,16 +83,16 @@ open class JujojazLib:Network<ByteArray> {
             for (o in jsonData) {
                 val dataObject = o as JSONObject
                 val dataFields = dataObject["fields"] as JSONObject
-                datas.add(ModelData(Integer.valueOf(dataObject["pk"].toString()),
+                datas.add(ModelData(
+                        Integer.valueOf(dataObject["pk"].toString()),
                         dataFields["file_foto_b64"].toString(),
                         dataFields["from_name"].toString(),
                         dataFields["car_name"].toString(),
                         dataFields["merk"].toString(),
                         dataFields["tipe"].toString(),
-                        dataFields["servis_dimulai"].toString(),
-                        dataFields["servis_setiap_berapa_hari"].toString(),
-                        dataFields["pajak_dimulai"].toString(),
-                        dataFields["pajak_setiap_berapa_hari"].toString()))
+                        dataFields["servis_selanjutnya"].toString(),
+                        dataFields["pajak_selanjutnya"].toString()
+                ))
             }
 
             return datas;

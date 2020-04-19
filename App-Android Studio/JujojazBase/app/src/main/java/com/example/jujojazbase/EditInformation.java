@@ -75,12 +75,12 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
         textTipe.setText(data.getTipe());
         textMerk = findViewById(R.id.textMerk);
         textMerk.setText(data.getMerk());
-        textPajakHari = findViewById(R.id.textPajakHari);
-        textPajakHari.setText(data.getPajak_hari());
+//        textPajakHari = findViewById(R.id.textPajakHari);
+//        textPajakHari.setText(data.getPajak_hari());
         textPajakMulai = findViewById(R.id.textPajakMulai);
         textPajakMulai.setText(data.getPajak_dimulai());
-        textServisHari = findViewById(R.id.textServisHari);
-        textServisHari.setText(data.getServis_hari());
+//        textServisHari = findViewById(R.id.textServisHari);
+//        textServisHari.setText(data.getServis_hari());
         textServisMulai = findViewById(R.id.textServisMulai);
         textServisMulai.setText(data.getServis_dimulai());
 
@@ -261,11 +261,9 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
                                 ((EditText) findViewById(R.id.textMerk)).getText().toString(),
                                 ((EditText) findViewById(R.id.textTipe)).getText().toString(),
                                 ((EditText) findViewById(R.id.textServisMulai)).getText().toString(),
-                                ((EditText) findViewById(R.id.textServisHari)).getText().toString(),
-                                ((EditText) findViewById(R.id.textPajakMulai)).getText().toString(),
-                                ((EditText) findViewById(R.id.textPajakHari)).getText().toString()
+                                ((EditText) findViewById(R.id.textPajakMulai)).getText().toString()
                         ));
-                        onBackPressed();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -289,10 +287,10 @@ public class EditInformation extends AppCompatActivity implements View.OnClickLi
         dataJson.put("car_name", ((EditText)findViewById(R.id.textCarName)).getText().toString());
         dataJson.put("tipe", ((EditText)findViewById(R.id.textTipe)).getText().toString());
         dataJson.put("merk", ((EditText)findViewById(R.id.textMerk)).getText().toString());
-        dataJson.put("pajak_setiap_berapa_hari", ((EditText)findViewById(R.id.textPajakHari)).getText().toString());
-        dataJson.put("pajak_dimulai", ((EditText)findViewById(R.id.textPajakMulai)).getText().toString());
-        dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
-        dataJson.put("servis_dimulai", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
+//        dataJson.put("pajak_setiap_berapa_hari", ((EditText)findViewById(R.id.textPajakHari)).getText().toString());
+        dataJson.put("pajak_selanjutnya", ((EditText)findViewById(R.id.textPajakMulai)).getText().toString());
+//        dataJson.put("servis_setiap_berapa_hari", ((EditText)findViewById(R.id.textServisHari)).getText().toString());
+        dataJson.put("servis_selanjutnya", ((EditText)findViewById(R.id.textServisMulai)).getText().toString());
         dataJson.put("photo", Document_img1);
         net.sendUrl(Configuration.Companion.getAPI_SERVER() + "/api/editvehicle/", Lib.Companion.byteToByte(("data="+dataJson.toString()).getBytes()), 0);
     }

@@ -44,6 +44,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public Unit onDone(JSONObject json){
         new_data = JujojazLib.Companion.convertJSONToModelData(json);
+        Auth.datas = new_data;
         List<String> checkTipe = new ArrayList<>();
         id = new ArrayList<>();
         for (ModelData o : this.new_data) {
