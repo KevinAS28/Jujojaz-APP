@@ -36,25 +36,15 @@ def checkPajakServis(request):
     range_days_notif = list(range(0, 8))
 
     for kendaraan in semua_kendaraan:
-        pajak_days = int((kendaraan.pajak_dimulai-now).days+kendaraan.pajak_setiap_berapa_hari)
-        servis_days = int((kendaraan.servis_dimulai-now).days+kendaraan.servis_setiap_berapa_hari)
-        
-        print(pajak_days, servis_days)
+        pajak_range = (kendaraan.pajak_selanjutnya-now).days
+        print("pajak_range: ", int(pajak_range))
+        if pajak_range in range_days_notif:
+            to_return["pajak"].append([str(kendaraan.car_name), str(pajak_range)])
 
-        
-        if pajak_days<=0:
-            kendaraan.pajak_dimulai = "%d-%d-%d"%(now.year, now.month, now.day)
-            kendaraan.save()
-
-        if servis_days<=0:
-            kendaraan.servis_dimulai = "%d-%d-%d"%(now.year, now.month, now.day)            
-            kendaraan.save()
-
-        if (pajak_days in range_days_notif):
-            to_return["pajak"].append([str(kendaraan.car_name), str(pajak_days)])
-
-        if (servis_days in range_days_notif):
-            to_return["servis"].append([str(kendaraan.car_name), str(servis_days)])
+        servis_range = (kendaraan.servis_selanjutnya-now).days
+        print("servis_range: ", int(servis_range))
+        if servis_range in range_days_notif:
+            to_return["servis"].append([str(kendaraan.car_name), str(servis_range)])
 
     return JsonResponse(to_return)
 
@@ -126,10 +116,8 @@ def edit_vehicle(request):
     kendaraan.car_name = data["car_name"]
     kendaraan.tipe = type_object
     kendaraan.merk = merk_object
-    kendaraan.pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
-    kendaraan.pajak_dimulai = data["pajak_dimulai"]
-    kendaraan.servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
-    kendaraan.servis_dimulai = data["servis_dimulai"]
+    kendaraan.pajak_selanjutnya = data["pajak_selanjutnya"]
+    kendaraan.servis_selanjutnya = data["servis_selanjutnya"]
     kendaraan.save()
     print(f'edit ${user.username}\'s vehicle succeed')
     return JsonResponse({'success': '1'})
@@ -159,12 +147,10 @@ def add_vehicle(request):
     car_name = data["car_name"]
     tipe = type_object
     merk = merk_object
-    pajak_setiap_berapa_hari = int(data["pajak_setiap_berapa_hari"])
-    pajak_dimulai = data["pajak_dimulai"]
-    servis_setiap_berapa_hari = int(data["servis_setiap_berapa_hari"])
-    servis_dimulai = data["servis_dimulai"]
+    pajak_selanjutnya = data["pajak_selanjutnya"]
+    servis_selanjutnya = data["servis_selanjutnya"]
     foto_foto = str(user.id) + '_' +  car_name.replace(' ', '_')
-    Vehicle(user=user,from_name=from_name, car_name=car_name, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_setiap_berapa_hari=pajak_setiap_berapa_hari, pajak_dimulai=pajak_dimulai, servis_setiap_berapa_hari=servis_setiap_berapa_hari, servis_dimulai=servis_dimulai).save()
+    Vehicle(user=user,from_name=from_name, car_name=car_name, tipe=tipe, merk=merk, foto_foto=foto_foto, pajak_selanjutnya=pajak_selanjutnya, servis_selanjutnya=servis_selanjutnya).save()
     foto_file = data["photo"]
     write_base64_file(foto_file, os.path.join(PHOTOS_DIR, foto_foto))
     print(f'add ${user.username}\'s vehicles succeed')  

@@ -26,10 +26,9 @@ class Vehicle(models.Model):
     # foto_kuitansi_servis = models.CharField(max_length=25, default="")
     # foto_ktp = models.CharField(max_length=25, default="")
     foto_foto = models.CharField(max_length=25, default="")
-    pajak_setiap_berapa_hari = models.IntegerField(default=90)
-    pajak_dimulai = models.DateField(default=now)
-    servis_setiap_berapa_hari = models.IntegerField(default=90)
-    servis_dimulai = models.DateField(default=now)
+    
+    pajak_selanjutnya = models.DateField(default=now)
+    servis_selanjutnya = models.DateField(default=now)
 
 class VehiclePhoto(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.DO_NOTHING)
